@@ -4,14 +4,14 @@
 #include "views/CardView.h"
 #include "configs/models/CardResConfig.h"
 #include "managers/LayoutManager.h"
-#include "services/TweenService.h"// Æ½ÒÆ¶¯»­
-#include "services/UndoService.h" // ³·Ïú¼ÇÂ¼ÈëÕ»
+#include "services/TweenService.h"// å¹³ç§»åŠ¨ç”»
+#include "services/UndoService.h" // æ’¤é”€è®°å½•å…¥æ ˆ
 
 
 USING_NS_CC;
 
 CardView* StackController::findCardViewIn(Node* parent, int uid) const {
-    // ÔÚ parent µÄÖ±½Ó×Ó½ÚµãÖÐ²éÕÒ uid Æ¥ÅäµÄ CardView£¨·ÇµÝ¹é±éÀú£©
+    // åœ¨parentçš„ç›´æŽ¥å­èŠ‚ç‚¹ä¸­æŸ¥æ‰¾uidåŒ¹é…çš„CardView
     const auto& children = parent->getChildren();
     for (size_t i = 0; i < children.size(); ++i) {
         Node* n = children.at(i);
@@ -25,31 +25,31 @@ CardView* StackController::findCardViewIn(Node* parent, int uid) const {
 
 void StackController::initView(const LevelConfig& cfg) {
     const int n = (int)cfg.stack.size();
-    // 1) ÊÖÅÆ²ÛäÖÈ¾£º¶ÔÃ¿¸öÊÖÅÆ²Û£¬È¡¡°¶¥ÅÆ¡±£¨back()£©»­µ½¶ÔÓ¦²ÛÎ»
-    for (int i = 0; i < n - 1; ++i) {// ×¢Òâ£ºcfg.stack µÄ×îºóÒ»¸ñÍ¨³£ÓÃÓÚ¡°¶¥²¿Î»¡±
+    //æ‰‹ç‰Œæ§½æ¸²æŸ“ï¼šå¯¹æ¯ä¸ªæ‰‹ç‰Œæ§½ï¼Œå–â€œé¡¶ç‰Œâ€ï¼ˆback()ï¼‰ç”»åˆ°å¯¹åº”æ§½ä½
+    for (int i = 0; i < n - 1; ++i) {
         if (_m.hand.size() <= (size_t)i || _m.hand[i].empty()) continue;
-        int uid = _m.hand[i].back();// ¶¥ÅÆ uid
-        const CardModel& cm = _m.cards.at(uid);// µãÊý/»¨É«
+        int uid = _m.hand[i].back();// é¡¶ç‰Œuid
+        const CardModel& cm = _m.cards.at(uid);// ç‚¹æ•°/èŠ±è‰²
 
         CardView* cv = CardView::create(uid);
         _stackV.addChild(cv);
-        cv->setPosition(_layout.handPos(i));// °Úµ½µÚ i ¸öÊÖÅÆ²ÛÎ»
+        cv->setPosition(_layout.handPos(i));// æ‘†åˆ°ç¬¬iä¸ªæ‰‹ç‰Œæ§½ä½
         cv->applyFaceComposite(cm.rank, cm.suit, true);
-        // ¸ø¸Ã¶¥ÅÆ×¢²áµã»÷£ºµã»÷ºóÓÉ±¾¿ØÖÆÆ÷´¦Àí¡°Ìæ»»µ½¶¥²¿Î»¡±
+        // ç»™è¯¥é¡¶ç‰Œæ³¨å†Œç‚¹å‡»ï¼šç‚¹å‡»åŽç”±æœ¬æŽ§åˆ¶å™¨å¤„ç†â€œæ›¿æ¢åˆ°é¡¶éƒ¨ä½â€
         cv->setOnClicked([this, i](int) { handleHandClick(i); });
     }
     
-    // 2) ¶¥²¿Î»äÖÈ¾£ºÈôÄ£ÐÍÖÐÒÑÓÐ top£¬Ôò»­³öËü
+    //é¡¶éƒ¨ä½æ¸²æŸ“ï¼šè‹¥æ¨¡åž‹ä¸­å·²æœ‰topï¼Œåˆ™ç”»å‡ºå®ƒ
     if (_m.top != -1) {
         int uid = _m.top;
         const CardModel& cm = _m.cards.at(uid);
         CardView* topView = CardView::create(uid);
         _stackV.addChild(topView);
-        topView->setPosition(_layout.topPos());// ¶¥²¿Î»×ø±ê
+        topView->setPosition(_layout.topPos());// é¡¶éƒ¨ä½åæ ‡
         topView->applyFaceComposite(cm.rank, cm.suit, true);
     }
 
-    // 3) ³·Ïú°´Å¥»Øµ÷Çå¿Õ£¨ÕæÕý°ó¶¨ÔÚ GameController::hookUndoButton ÖÐ£©
+    //æ’¤é”€æŒ‰é’®å›žè°ƒæ¸…ç©ºï¼ˆçœŸæ­£ç»‘å®šåœ¨GameController::hookUndoButtonä¸­ï¼‰
     const auto& children = _stackV.getChildren();
     for (size_t i = 0; i < children.size(); ++i) {
         Node* n = children.at(i);
@@ -61,44 +61,44 @@ void StackController::initView(const LevelConfig& cfg) {
 }
 
 void StackController::handleHandClick(int handIndex) {
-    // µã»÷Ä³¸öÊÖÅÆ²ÛµÄ¶¥ÅÆ£ºÈôË÷ÒýÓÐÐ§ÇÒ¸Ã²Û·Ç¿Õ£¬ÔòÖ´ÐÐÌæ»»
+    // ç‚¹å‡»æŸä¸ªæ‰‹ç‰Œæ§½çš„é¡¶ç‰Œï¼šè‹¥ç´¢å¼•æœ‰æ•ˆä¸”è¯¥æ§½éžç©ºï¼Œåˆ™æ‰§è¡Œæ›¿æ¢
     if (handIndex < 0 || handIndex >= (int)_m.hand.size()) return;
     if (_m.hand[handIndex].empty()) return;
     replaceTopWithHandCard(handIndex);
 }
 
 void StackController::replaceTopWithHandCard(int handIndex) {
-    // 1) ´ÓÄ£ÐÍµÄÊÖÅÆÁÐÖÐµ¯³ö¸ÃÁÐ¶¥ÅÆ uid
+    //ä»Žæ¨¡åž‹çš„æ‰‹ç‰Œåˆ—ä¸­å¼¹å‡ºè¯¥åˆ—é¡¶ç‰Œuid
     int uid = _m.hand[handIndex].back();
     _m.hand[handIndex].pop_back();
 
-    // 2) Éú³É³·Ïú¼ÇÂ¼²¢ÈëÕ»
+    //ç”Ÿæˆæ’¤é”€è®°å½•å¹¶å…¥æ ˆ
     UndoRecord r;
-    r.type = UndoRecord::HAND_TO_TOP;// ÀàÐÍ£ºÊÖÅÆ -> ¶¥²¿
-    r.movedUid = uid; // ÒÆ¶¯µÄÅÆ
-    r.prevTopUid = _m.top;// Ô­ÏÈµÄ¶¥²¿ÅÆ£¨³·ÏúÊ±Ðè»Ö¸´£©
-    r.fromHandIndex = handIndex; // À´×ÔÄÄÒ»ÁÐÊÖÅÆ
-    r.fromPos = _layout.handPos(handIndex);// ¸ÃÅÆµÄ³ö·¢Î»ÖÃ£¨³·Ïú¹éÎ»ÓÃ£©
+    r.type = UndoRecord::HAND_TO_TOP;// ç±»åž‹ï¼šæ‰‹ç‰Œ -> é¡¶éƒ¨
+    r.movedUid = uid; // ç§»åŠ¨çš„ç‰Œ
+    r.prevTopUid = _m.top;// åŽŸå…ˆçš„é¡¶éƒ¨ç‰Œï¼ˆæ’¤é”€æ—¶éœ€æ¢å¤ï¼‰
+    r.fromHandIndex = handIndex; // æ¥è‡ªå“ªä¸€åˆ—æ‰‹ç‰Œ
+    r.fromPos = _layout.handPos(handIndex);// è¯¥ç‰Œçš„å‡ºå‘ä½ç½®ï¼ˆæ’¤é”€å½’ä½ç”¨ï¼‰
     UndoService::push(_undo, r);
 
-    // 3) ÊÓÍ¼¸üÐÂ£º
-    // 3.1 Èô¶¥²¿ÒÑ´æÔÚÅÆ£ºÕÒµ½ÆäÊÓÍ¼²¢¡°Òþ²Ø¡±£¨±£ÁôÒÔ±ã³·ÏúÊ±»Ö¸´£©
+    // è§†å›¾æ›´æ–°ï¼š
+    // è‹¥é¡¶éƒ¨å·²å­˜åœ¨ç‰Œï¼šæ‰¾åˆ°å…¶è§†å›¾å¹¶â€œéšè—â€ï¼ˆä¿ç•™ä»¥ä¾¿æ’¤é”€æ—¶æ¢å¤ï¼‰
     if (_m.top != -1) {
         CardView* oldV = findCardViewIn(&_stackV, _m.top);
         if (oldV) oldV->setVisible(false);
     }
-    //3.2 ÕÒµ½ÕâÕÅÊÖÅÆµÄÊÓÍ¼
+    //æ‰¾åˆ°è¿™å¼ æ‰‹ç‰Œçš„è§†å›¾
     CardView* v = findCardViewIn(&_stackV, uid);
     if (v) {
-        // ÒÑ´æÔÚÊÓÍ¼£ºÖ±½Ó´ÓÊÖÅÆ²ÛÎ» Tween µ½¶¥²¿Î»
+        // å·²å­˜åœ¨è§†å›¾ï¼šç›´æŽ¥ä»Žæ‰‹ç‰Œæ§½ä½Tweenåˆ°é¡¶éƒ¨ä½
         TweenService::moveTo(v, _layout.topPos(), [this, uid] { _m.top = uid; });
     }
     else {
-        // Ã»ÓÐÏÖ³ÉÊÓÍ¼£¨ÀýÈçÊ×´ÎäÖÈ¾£©£º´´½¨Ò»¸öÔÙ Tween µ½¶¥²¿Î»
+        // æ²¡æœ‰çŽ°æˆè§†å›¾ï¼ˆä¾‹å¦‚é¦–æ¬¡æ¸²æŸ“ï¼‰ï¼šåˆ›å»ºä¸€ä¸ªå†Tweenåˆ°é¡¶éƒ¨ä½
         const CardModel& cm = _m.cards.at(uid);
         CardView* cv = CardView::create(uid);
         _stackV.addChild(cv);
-        cv->setPosition(_layout.handPos(handIndex)); // ÏÈ·ÅÔÚÊÖÅÆ²ÛÆðµã
+        cv->setPosition(_layout.handPos(handIndex)); // å…ˆæ”¾åœ¨æ‰‹ç‰Œæ§½èµ·ç‚¹
         cv->applyFaceComposite(cm.rank, cm.suit, true);
         TweenService::moveTo(cv, _layout.topPos(), [this, uid] { _m.top = uid; });
     }
