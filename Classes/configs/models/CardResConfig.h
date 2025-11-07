@@ -1,54 +1,48 @@
-// Classes/configs/models/CardResConfig.h
-//Ìá¹©ÓëÆ¤·ôÎŞ¹ØµÄÈ«¾Ö UI / ²¼¾Ö³£Á¿Óë¡°ÅÆÃæµ×°å / ÅÆ±³¡±µÄÎÄ¼şÃû¡£
-// ¿ØÖÆ GameView ÉÏÏÂ·ÖÇø¸ß¶È¡¢ÊÖÅÆÓë¶¥²¿ÅÆÎ»ÖÃ¡¢¿¨ÃæÔªËØ±ÈÀı¡¢ÒÆ¶¯¶¯»­Ê±³¤µÈ¡£
 #pragma once
 #include <string>
 
 /**
- * CardResConfig
- * -------------
- * Óë¡°Æ¤·ô×ÊÔ´¡±ÎŞ¹ØµÄÈ«¾Ö³£Á¿Óë¹«¹²ÌùÍ¼Ãû¡£
- * - Éè¼Æ·Ö±æÂÊÓëÇøÓò¸ß¶È£¨GameView ²¼¾Ö¡¢ÉÏÏÂ·ÖÇø×ÅÉ«£©
- * - ÊÖÅÆÓë¶¥²¿ÅÆµÄ°Ú·Å²ÎÊı
- * - ¿¨ÃæÔªËØ£¨´óÊı×Ö/Ğ¡Êı×Ö/Ğ¡»¨É«£©Ëõ·ÅÓëÄÚ±ß¾à±ÈÀı
- * - ÅÆÃæµ×°å/ÅÆ±³ÎÄ¼şÃû£¨Í¨³£ÓÉÒ»ÕÅ card_general.png ¸´ÓÃ£©
- *
- * ²»¸ºÔğºì/ºÚ´óÊı×ÖÂ·¾¶£»ÄÇÊÇ CardSkinConfig µÄÖ°Ôğ¡£
+ * ä¸â€œçš®è‚¤èµ„æºâ€æ— å…³çš„å…¨å±€å¸¸é‡ä¸å…¬å…±è´´å›¾åã€‚
+ * - è®¾è®¡åˆ†è¾¨ç‡ä¸åŒºåŸŸé«˜åº¦ï¼ˆGameView å¸ƒå±€ã€ä¸Šä¸‹åˆ†åŒºç€è‰²ï¼‰
+ * - æ‰‹ç‰Œä¸é¡¶éƒ¨ç‰Œçš„æ‘†æ”¾å‚æ•°
+ * - å¡é¢å…ƒç´ ï¼ˆå¤§æ•°å­—/å°æ•°å­—/å°èŠ±è‰²ï¼‰ç¼©æ”¾ä¸å†…è¾¹è·æ¯”ä¾‹
+ * - ç‰Œé¢åº•æ¿/ç‰ŒèƒŒæ–‡ä»¶åï¼ˆé€šå¸¸ç”±ä¸€å¼ card_general.png å¤ç”¨ï¼‰
+ * ä¸è´Ÿè´£çº¢/é»‘å¤§æ•°å­—è·¯å¾„ï¼›é‚£æ˜¯CardSkinConfigçš„èŒè´£ã€‚
  */
 
 struct CardResConfig {
-    // --------- »­²¼/·ÖÇø³ß´ç£¨Óë AppDelegate µÄ setDesignResolutionSize ±£³ÖÒ»ÖÂ£© ---------
+    // --------- ç”»å¸ƒ/åˆ†åŒºå°ºå¯¸ï¼ˆä¸AppDelegateçš„setDesignResolutionSizeä¿æŒä¸€è‡´ï¼‰ ---------
     static constexpr int  kDesignW = 1080;
     static constexpr int  kDesignH = 2080;
-    static constexpr int  kPlayfieldH = 1500;// ÉÏ°ëÖ÷ÅÆÇø¸ß¶È
-    static constexpr int  kStackH = 580;// ÏÂ°ë¶ÑÇø¸ß¶È
+    static constexpr int  kPlayfieldH = 1500;// ä¸ŠåŠä¸»ç‰ŒåŒºé«˜åº¦
+    static constexpr int  kStackH = 580;// ä¸‹åŠå †åŒºé«˜åº¦
 
-    // --------- ¹æÔò/½»»¥Ïà¹Ø³£Á¿ ----------
-    static constexpr bool  kWrapAk = false;// A Óë K ÊÇ·ñÏàÁÚ£¨Íæ·¨¿ª¹Ø£©
-    static constexpr float kMoveDuration = 0.18f;// ¼òµ¥ MoveTo ¶¯»­Ê±³¤£¨Ãë£©
+    // --------- è§„åˆ™/äº¤äº’ç›¸å…³å¸¸é‡ ----------
+    static constexpr bool  kWrapAk = false;//Aä¸Kæ˜¯å¦ç›¸é‚»
+    static constexpr float kMoveDuration = 0.18f;// ç®€å•MoveToåŠ¨ç”»æ—¶é•¿ï¼ˆç§’ï¼‰
 
-    // --------- ¶ÑÇø£¨µ×²¿£©°Ú·Å ----------
-    static constexpr float kHandGap = 150.f;// ÊÖÅÆÖ®¼äµÄË®Æ½¼ä¾à
-    static constexpr float kHandStartX = 270.f;// ×ó²àµÚÒ»ÕÅÊÖÅÆµÄ X
-    static constexpr float kHandY = kStackH * 0.5f;// ÊÖÅÆ Y
-    static constexpr float kTopX = 750.f;// ÓÒ²à¶¥²¿ÅÆµÄ X
-    static constexpr float kTopY = kStackH * 0.5f;// ¶¥²¿ÅÆ Y
+    // --------- å †åŒºï¼ˆåº•éƒ¨ï¼‰æ‘†æ”¾ ----------
+    static constexpr float kHandGap = 150.f;// æ‰‹ç‰Œä¹‹é—´çš„æ°´å¹³é—´è·
+    static constexpr float kHandStartX = 270.f;// å·¦ä¾§ç¬¬ä¸€å¼ æ‰‹ç‰Œçš„X
+    static constexpr float kHandY = kStackH * 0.5f;// æ‰‹ç‰ŒY
+    static constexpr float kTopX = 750.f;// å³ä¾§é¡¶éƒ¨ç‰Œçš„X
+    static constexpr float kTopY = kStackH * 0.5f;// é¡¶éƒ¨ç‰ŒY
 
-    // --------- ¿¨ÃæÔªËØËõ·Å£¨°´ÅÆ¸ß±ÈÀı£© ----------
-    // ÕâĞ©±ÈÀıÔÚ CardView::applyFaceComposite() ÖĞÓÃÓÚËõ·Å¸÷ÔªËØ
-    // ½Ç±êÓëÖĞĞÄÔªËØµÄ²¼¾Ö£¨°´ÅÆ¸ß±ÈÀı£©
-    static constexpr float kBigNumHRate = 0.55f; // ÖĞÑë´óÊı×ÖÕ¼ÅÆ¸ß
-    static constexpr float kSmallNumHRate = 0.14f;// ×óÉÏ½ÇĞ¡Êı×ÖÕ¼ÅÆ¸ß
-    static constexpr float kSmallSuitHRate = 0.14f; // ÓÒÉÏ½ÇĞ¡»¨É«Õ¼ÅÆ¸ß
+    // --------- å¡é¢å…ƒç´ ç¼©æ”¾ï¼ˆæŒ‰ç‰Œé«˜æ¯”ä¾‹ï¼‰ ----------
+    // è¿™äº›æ¯”ä¾‹åœ¨ CardView::applyFaceComposite() ä¸­ç”¨äºç¼©æ”¾å„å…ƒç´ 
+    // è§’æ ‡ä¸ä¸­å¿ƒå…ƒç´ çš„å¸ƒå±€ï¼ˆæŒ‰ç‰Œé«˜æ¯”ä¾‹ï¼‰
+    static constexpr float kBigNumHRate = 0.55f; // ä¸­å¤®å¤§æ•°å­—å ç‰Œé«˜
+    static constexpr float kSmallNumHRate = 0.14f;// å·¦ä¸Šè§’å°æ•°å­—å ç‰Œé«˜
+    static constexpr float kSmallSuitHRate = 0.14f; // å³ä¸Šè§’å°èŠ±è‰²å ç‰Œé«˜
 
-    // --------- ½Ç±êÄÚ±ß¾à£¨Ïà¶ÔÅÆ¿í/¸ß£© ----------
-    static constexpr float kCornerPadXRate = 0.07f; // ×óÓÒ±ß¾à = ÅÆ¿í * 0.07
-    static constexpr float kCornerPadYRate = 0.06f; // ÉÏ±ß¾à   = ÅÆ¸ß * 0.06
+    // --------- è§’æ ‡å†…è¾¹è·ï¼ˆç›¸å¯¹ç‰Œå®½/é«˜ï¼‰ ----------
+    static constexpr float kCornerPadXRate = 0.07f; // å·¦å³è¾¹è· = ç‰Œå®½ * 0.07
+    static constexpr float kCornerPadYRate = 0.06f; // ä¸Šè¾¹è·   = ç‰Œé«˜ * 0.06
 
-    // --------- µ×°å/ÅÆ±³ÌùÍ¼ ----------
-    // ÓëÆ¤·ôÄ¿Â¼ÎŞ¹Ø£º°Ñ´ËÎÄ¼ş·ÅÔÚ Resources ¸ùÄ¿Â¼¼´¿É
+    // --------- åº•æ¿/ç‰ŒèƒŒè´´å›¾ ----------
+    // ä¸çš®è‚¤ç›®å½•æ— å…³ï¼šæŠŠæ­¤æ–‡ä»¶æ”¾åœ¨Resourcesæ ¹ç›®å½•å³å¯
     static std::string backgroundTex() { return "card_general.png"; }
-    static std::string faceTex(int, int) { return backgroundTex(); } // ¼æÈİ¾É½Ó¿Ú
+    static std::string faceTex(int, int) { return backgroundTex(); }
     static std::string backTex() { return backgroundTex(); }
 };
 
