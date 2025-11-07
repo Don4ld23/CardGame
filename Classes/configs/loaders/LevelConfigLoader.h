@@ -1,27 +1,17 @@
 #pragma once
-#include "configs/models/LevelConfig.h"// ¹Ø¿¨ÅäÖÃµÄÊı¾İ½á¹¹ÉùÃ÷
+#include "configs/models/LevelConfig.h"// å…³å¡é…ç½®çš„æ•°æ®ç»“æ„å£°æ˜
 #include <string>
 
 /**
- * ¸ºÔğ°Ñ´ÅÅÌÉÏµÄ¹Ø¿¨JSON£¨¾²Ì¬ÅäÖÃ£©¶ÁÈ¡²¢·´ĞòÁĞ»¯³ÉÔËĞĞÊ±½á¹¹LevelConfig¡£
- * - Ö»×ö¡°¼ÓÔØÓë½âÎö¡±£¬²»Éæ¼°ÈÎºÎÓÎÏ·Âß¼­£¨·ûºÏ¡°Services/Configs·Ö²ã¡±£©¡£
- * - ¹©GameControllerÔÚstartGame(levelId)Ê±µ÷ÓÃ¡£
- * ÒÀÀµ£º
- *  - Cocos2d-x FileUtils£¨¶ÁÎÄ¼ş£©
- *  - rapidjson£¨½âÎö JSON£©
+ * è´Ÿè´£æŠŠç£ç›˜ä¸Šçš„å…³å¡JSONï¼ˆé™æ€é…ç½®ï¼‰è¯»å–å¹¶ååºåˆ—åŒ–æˆè¿è¡Œæ—¶ç»“æ„LevelConfigã€‚
+ * - åªåšâ€œåŠ è½½ä¸è§£æâ€ï¼Œä¸æ¶‰åŠä»»ä½•æ¸¸æˆé€»è¾‘ï¼ˆç¬¦åˆâ€œServices/Configsåˆ†å±‚â€ï¼‰ã€‚
  */
 
 class LevelConfigLoader {
 public:
-    /**
-     * ´ÓÏà¶ÔResources/µÄÂ·¾¶¶ÁÈ¡JSON²¢Ìî³äout¡£
-     * @param path  ÀıÈç "config/level1.json"
-     * @param out   Êä³öµÄ LevelConfig£¨µ÷ÓÃÇ°²»ĞèÒª³õÊ¼»¯£©
-     * @return      ½âÎö³É¹¦·µ»Øtrue£»·ñÔòfalse
-     */
     static bool loadFromJson(const std::string& path, LevelConfig& out);
 
-    // °´¹Ø¿¨ºÅ¶ÁÈ¡£ºResources/config/level{levelId}.json
+    // æŒ‰å…³å¡å·è¯»å–ï¼šResources/config/level{levelId}.json
     static inline bool loadLevelConfig(int levelId, LevelConfig& out) {
         return loadFromJson(
             cocos2d::StringUtils::format("config/level%d.json", levelId),
