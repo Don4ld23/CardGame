@@ -1,58 +1,39 @@
 #pragma once
 #include "cocos2d.h"
 
-//GameViewÊÇÕû¸öÊÓÍ¼²ãµÄ¶¥¼¶ÈİÆ÷£¨¼Ì³Ğcocos2d::Node£©£¬
-//¸ºÔğ°ÑÁ½¸öÖ÷Òª×ÓÊÓÍ¼ÅÆ×ÀÇø£¨PlayFieldView£©ºÍ¶ÑÇø/·¢ÅÆÇø£¨StackView£©°Ú·Åµ½ÆÁÄ»ÉÏ£¬²¢ÆÌÉÏÉÏÏÂ·ÖÇøµÄ±³¾°É«¿é¡£
-
-class PlayFieldView;// ÅÆ×À/Íæ·¨Çø£¨ÉÏ°ëÇø£©
-class StackView;// ¶ÑÇø/·¢ÅÆÇø£¨ÏÂ°ëÇø£©
-class CardView; // µ¥ÕÅÅÆµÄÊÓÍ¼
-struct LevelConfig; // ¹Ø¿¨ÅäÖÃ£¨Êı¾İ²ã£©
-class LayoutManager;// ²¼¾Ö¹ÜÀíÆ÷£¨ÓÃÓÚ¼ÆËã/×éÖ¯³õÊ¼²¼¾Ö£©
+class PlayFieldView;// ç‰Œæ¡Œ/ç©æ³•åŒºï¼ˆä¸ŠåŠåŒºï¼‰
+class StackView;// å †åŒº/å‘ç‰ŒåŒºï¼ˆä¸‹åŠåŒºï¼‰
+class CardView; // å•å¼ ç‰Œçš„è§†å›¾
+struct LevelConfig; // å…³å¡é…ç½®ï¼ˆæ•°æ®å±‚ï¼‰
+class LayoutManager;// å¸ƒå±€ç®¡ç†å™¨ï¼ˆç”¨äºè®¡ç®—/ç»„ç»‡åˆå§‹å¸ƒå±€ï¼‰
 
 /*
- * - ×÷ÎªÊÓÍ¼²ã¶¥¼¶ÈİÆ÷£¬½«PlayFieldView£¨ÉÏ°ëÇø£©ºÍStackView£¨ÏÂ°ëÇø£©°Ú·Åµ½ÆÁÄ»ÉÏ¡£
- * - ¸ºÔğ½¨Á¢ÉÏÏÂ·ÖÇø±³¾°É«¿é£¨½öÊÓ¾õ·ÖÇø£¬²»º¬Âß¼­£©¡£
- * - setupInitialLayoutÔÚÏÂ°ëÇø¹ÒÔØ»ØÍË°´Å¥£¬È·±£²ã¼¶ÔÚ¿¨ÅÆÖ®ÉÏ¡£
- * - Ìá¹©playEnterAnimation£º½øÈë³¡¾°Ê±µÄµ­Èë¶¯»­¡£
- * - Ìá¹©findCardViewIn£ºÔÚÖ¸¶¨¸¸½ÚµãÏÂ£¬°´uidËÑË÷CardView£¨µ¥²ã±éÀú£©¡£
- * - ÕâÀï²»°üº¬ÓÎÏ·¹æÔòÓëÆ¥ÅäÂß¼­£¬½ö¸ºÔğÊÓÍ¼´î½¨Óë¼òµ¥¹ı³¡¡£
+ * - ä½œä¸ºè§†å›¾å±‚é¡¶çº§å®¹å™¨ï¼Œå°†PlayFieldViewï¼ˆä¸ŠåŠåŒºï¼‰å’ŒStackViewï¼ˆä¸‹åŠåŒºï¼‰æ‘†æ”¾åˆ°å±å¹•ä¸Šã€‚
+ * - è´Ÿè´£å»ºç«‹ä¸Šä¸‹åˆ†åŒºèƒŒæ™¯è‰²å—ï¼ˆä»…è§†è§‰åˆ†åŒºï¼Œä¸å«é€»è¾‘ï¼‰ã€‚
+ * - setupInitialLayoutåœ¨ä¸‹åŠåŒºæŒ‚è½½å›é€€æŒ‰é’®ï¼Œç¡®ä¿å±‚çº§åœ¨å¡ç‰Œä¹‹ä¸Šã€‚
+ * - æä¾›playEnterAnimationï¼šè¿›å…¥åœºæ™¯æ—¶çš„æ·¡å…¥åŠ¨ç”»ã€‚
+ * - æä¾›findCardViewInï¼šåœ¨æŒ‡å®šçˆ¶èŠ‚ç‚¹ä¸‹ï¼ŒæŒ‰uidæœç´¢CardViewï¼ˆå•å±‚éå†ï¼‰ã€‚
+ * - è¿™é‡Œä¸åŒ…å«æ¸¸æˆè§„åˆ™ä¸åŒ¹é…é€»è¾‘ï¼Œä»…è´Ÿè´£è§†å›¾æ­å»ºä¸ç®€å•è¿‡åœºã€‚
  */
 class GameView : public cocos2d::Node {
 public:
     CREATE_FUNC(GameView);
-    bool init() override;// ÉúÃüÖÜÆÚ³õÊ¼»¯£º¹¹½¨±³¾°Çø¿é¡¢´´½¨²¢°Ú·Å×ÓÊÓÍ¼
+    bool init() override;// ç”Ÿå‘½å‘¨æœŸåˆå§‹åŒ–ï¼šæ„å»ºèƒŒæ™¯åŒºå—ã€åˆ›å»ºå¹¶æ‘†æ”¾å­è§†å›¾
 
-    // ·ÃÎÊ×ÓÊÓÍ¼£¨±ãÓÚÍâ²¿¿ØÖÆ»ò²éÑ¯£©
-    PlayFieldView* playfieldView() const { return _playfield; }// ÉÏ°ëÇø
-    StackView* stackView()     const { return _stack; }// ÏÂ°ëÇø
+    // è®¿é—®å­è§†å›¾ï¼ˆä¾¿äºå¤–éƒ¨æ§åˆ¶æˆ–æŸ¥è¯¢ï¼‰
+    PlayFieldView* playfieldView() const { return _playfield; }// ä¸ŠåŠåŒº
+    StackView* stackView()     const { return _stack; }// ä¸‹åŠåŒº
 
-    /*
-     * ³õÊ¼»¯²¼¾ÖÓë»ØÍË°´Å¥
-     * @param layout ²¼¾Ö¹ÜÀíÆ÷
-     * @param cfg    ¹Ø¿¨ÅäÖÃ
-     */
     void setupInitialLayout(const LayoutManager& layout, const LevelConfig& cfg);
-    void playEnterAnimation(const std::function<void()>& onDone);//Èë³¡¶¯»­£ºÕû¿ÃGameView×öÒ»¸öµ­Èë£¬½áÊøºó»Øµ÷onDone
+    void playEnterAnimation(const std::function<void()>& onDone);//å…¥åœºåŠ¨ç”»ï¼šæ•´æ£µGameViewåšä¸€ä¸ªæ·¡å…¥ï¼Œç»“æŸåå›è°ƒonDone
 
-    // ²éÕÒÄ³¸¸½ÚµãÏÂµÄCardView£¨°´uid£©
-    /*
-     * ¡ï ¹¤¾ß£ºÔÚÄ³¸¸½ÚµãÏÂ²éÕÒÖ¸¶¨uidµÄCardView£¨½ö±éÀúÖ±½Ó×Ó½Úµã£©
-     * @param parent Òª²éÕÒµÄ¸¸½Úµã
-     * @param uid    Ä¿±ê¿¨ÅÆµÄÎ¨Ò»ID
-     * @returnÈôÕÒµ½·µ»ØÖ¸Õë£¬·ñÔò·µ»Ønullptr
-     */
+    // æŸ¥æ‰¾æŸçˆ¶èŠ‚ç‚¹ä¸‹çš„CardViewï¼ˆæŒ‰uidï¼‰
     CardView* findCardViewIn(cocos2d::Node* parent, int uid) const;
 
 private:
-    /**
-     * ´´½¨²¢°Ú·ÅÉÏÏÂÁ½¸ö±³¾°É«¿é£¨½öÊÓ¾õ·ÖÇø£¬±ãÓÚÓë¿¨ÅÆÇøÓòÇø·Ö£©
-     * - ÉÏÇø£ºÍæ·¨Çø±³¾°£¨Playfield£©
-     * - ÏÂÇø£º¶ÑÇø±³¾°£¨Stack£©
-     */
-    void buildBackgroundSections();   // ÉÏÏÂ·ÖÇø±³¾°
+    void buildBackgroundSections();   // ä¸Šä¸‹åˆ†åŒºèƒŒæ™¯
 
-    // ×ÓÊÓÍ¼Ö¸Õë£¨ÓÉinitÖĞ´´½¨²¢addChild£¬GameViewÎö¹¹Ê±ÓÉ³¡¾°Ê÷Í³Ò»ÊÍ·Å£©
-    PlayFieldView* _playfield = nullptr; // ÉÏ°ëÇø£ºÍæ·¨/ÅÆ×À
-    StackView* _stack = nullptr;// ÏÂ°ëÇø£ºÅÆ¶Ñ/·¢ÅÆÇø
+    // å­è§†å›¾æŒ‡é’ˆï¼ˆç”±initä¸­åˆ›å»ºå¹¶addChildï¼ŒGameViewææ„æ—¶ç”±åœºæ™¯æ ‘ç»Ÿä¸€é‡Šæ”¾ï¼‰
+    PlayFieldView* _playfield = nullptr; // ä¸ŠåŠåŒºï¼šç©æ³•/ç‰Œæ¡Œ
+    StackView* _stack = nullptr;// ä¸‹åŠåŒºï¼šç‰Œå †/å‘ç‰ŒåŒº
 };
