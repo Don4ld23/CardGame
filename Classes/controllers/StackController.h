@@ -5,26 +5,21 @@
 #include "models/UndoModel.h"
 #include <vector>
 
-//StackController ÊÇ** ÏÂ°ëÇøÍĞÅÌ / ÊÖÅÆÇøÓò£¨StackView£© * *µÄ¿ØÖÆÆ÷£º
-//initView£º¸ù¾İ GameModel °Ñ¸÷ÊÖÅÆ²ÛµÄ¡°¶¥²¿ÅÆ¡±ºÍ¡°¶¥²¿Çø(top)¡±äÖÈ¾³öÀ´£¬²¢¸øÊÖÅÆÅÆÃæ°ó¶¨µã»÷»Øµ÷¡£
-//handleHandClick£ºÓÃ»§µã»÷Ä³¸öÊÖÅÆ²ÛµÄ¶¥ÅÆÊ±´¥·¢¡£
-//replaceTopWithHandCard£º°Ñ¸ÃÊÖÅÆ¶¥ÅÆÒÆ¶¯µ½¡°¶¥²¿Î»¡±£¬±ØÒªÊ±´´½¨ĞÂÊÓÍ¼¡¢²¥·Å²¹¼ä£¬²¢ÍÆÈë³·Ïú¼ÇÂ¼¸üĞÂ GameModel¡£
-
-class StackView;// ÏÂ°ëÇøÍĞÅÌ/ÊÖÅÆÊÓÍ¼ÈİÆ÷
-class GameView;// ¶¥²ãÊÓÍ¼ÈİÆ÷£¨¿É·ÃÎÊ playfield/stack£©
-class CardView; // µ¥ÕÅÅÆµÄÊÓÍ¼
-class LayoutManager;// ²¼¾Ö£¨ÊÖÅÆ²Û¡¢¶¥²¿Î»×ø±êµÈ£©
+class StackView;// ä¸‹åŠåŒºæ‰˜ç›˜/æ‰‹ç‰Œè§†å›¾å®¹å™¨
+class GameView;// é¡¶å±‚è§†å›¾å®¹å™¨ï¼ˆå¯è®¿é—®playfield/stackï¼‰
+class CardView; // å•å¼ ç‰Œçš„è§†å›¾
+class LayoutManager;// å¸ƒå±€ï¼ˆæ‰‹ç‰Œæ§½ã€é¡¶éƒ¨ä½åæ ‡ç­‰ï¼‰
 
 /**
- * - ¸ºÔğ¡°ÍĞÅÌ/ÊÖÅÆÇø¡±µÄ¿ØÖÆÂß¼­£º
- *   * initView£º°ÑÊÖÅÆ¸÷ÁĞµÄ¡°¶¥ÅÆ¡±ºÍ¶¥²¿Î»äÖÈ¾µ½ StackView£»
- *   * handleHandClick£ºÏìÓ¦ÓÃ»§µã»÷Ä³¸öÊÖÅÆ²Û¶¥ÅÆ£»
- *   * replaceTopWithHandCard£º½«ÊÖÅÆ¶¥ÅÆÌæ»»µ½¡°¶¥²¿Î»¡±£¬¼ÇÂ¼³·Ïú²¢¸üĞÂÄ£ĞÍ¡£
- * - ½ö´¦ÀíÊÓÍ¼ÓëÄ£ĞÍµÄĞ­µ÷£¬²»°üº¬¹æÔòÅĞ¶Ï£¨ÏàÁÚµÈÔÚ PlayFieldController/RuleService£©¡£
+ * - è´Ÿè´£â€œæ‰˜ç›˜/æ‰‹ç‰ŒåŒºâ€çš„æ§åˆ¶é€»è¾‘ï¼š
+ *   * initViewï¼šæŠŠæ‰‹ç‰Œå„åˆ—çš„â€œé¡¶ç‰Œâ€å’Œé¡¶éƒ¨ä½æ¸²æŸ“åˆ°StackViewï¼›
+ *   * handleHandClickï¼šå“åº”ç”¨æˆ·ç‚¹å‡»æŸä¸ªæ‰‹ç‰Œæ§½é¡¶ç‰Œï¼›
+ *   * replaceTopWithHandCardï¼šå°†æ‰‹ç‰Œé¡¶ç‰Œæ›¿æ¢åˆ°â€œé¡¶éƒ¨ä½â€ï¼Œè®°å½•æ’¤é”€å¹¶æ›´æ–°æ¨¡å‹ã€‚
+ * - ä»…å¤„ç†è§†å›¾ä¸æ¨¡å‹çš„åè°ƒï¼Œä¸åŒ…å«è§„åˆ™åˆ¤æ–­ï¼ˆç›¸é‚»ç­‰åœ¨PlayFieldController/RuleServiceï¼‰ã€‚
  */
 class StackController {
 public:
-    // ¹¹Ôì£º³ÖÓĞÄ£ĞÍ/ÊÓÍ¼/¶¥²ãÊÓÍ¼/²¼¾Ö/³·ÏúÕ»µÄÒıÓÃ
+    // æ„é€ ï¼šæŒæœ‰æ¨¡å‹/è§†å›¾/é¡¶å±‚è§†å›¾/å¸ƒå±€/æ’¤é”€æ ˆçš„å¼•ç”¨
     StackController(GameModel& model,
         StackView& stackView,
         GameView& gameView,
@@ -33,21 +28,21 @@ public:
         : _m(model), _stackV(stackView), _gameV(gameView), _layout(layout), _undo(undoStack) {
     }
 
-    // ³õÊ¼»¯äÖÈ¾£ºÊÖÅÆ¸÷²ÛµÄ¶¥ÅÆ + ¶¥²¿Î»
+    // åˆå§‹åŒ–æ¸²æŸ“ï¼šæ‰‹ç‰Œå„æ§½çš„é¡¶ç‰Œ + é¡¶éƒ¨ä½
     void initView(const LevelConfig& cfg);
 
-    // ÓÃ»§µã»÷µÚ handIndex ¸öÊÖÅÆ²Û¶¥ÅÆ
+    // ç”¨æˆ·ç‚¹å‡»ç¬¬handIndexä¸ªæ‰‹ç‰Œæ§½é¡¶ç‰Œ
     void handleHandClick(int handIndex);
 
 private:
-    GameModel& _m;// Êı¾İÄ£ĞÍ£¨hand/top/cards µÈ£©
-    StackView& _stackV;// ÍĞÅÌ/ÊÖÅÆÊÓÍ¼ÈİÆ÷
-    GameView& _gameV;// ¶¥²ãÊÓÍ¼ÈİÆ÷£¨Ä¿Ç°Î´Ö±½ÓÊ¹ÓÃ£©
-    LayoutManager& _layout;// Ìá¹©ÊÖÅÆ²Û/¶¥²¿Î»×ø±ê
-    std::vector<UndoRecord>& _undo;// ³·ÏúÕ»
+    GameModel& _m;// æ•°æ®æ¨¡å‹ï¼ˆhand/top/cardsç­‰ï¼‰
+    StackView& _stackV;// æ‰˜ç›˜/æ‰‹ç‰Œè§†å›¾å®¹å™¨
+    GameView& _gameV;// é¡¶å±‚è§†å›¾å®¹å™¨
+    LayoutManager& _layout;// æä¾›æ‰‹ç‰Œæ§½/é¡¶éƒ¨ä½åæ ‡
+    std::vector<UndoRecord>& _undo;// æ’¤é”€æ ˆ
 
-    // ¹¤¾ß£ºÔÚ parent µÄÖ±½Ó×Ó½ÚµãÀï°´ uid ²éÕÒ CardView£¨·Çµİ¹é£©
+    // å·¥å…·ï¼šåœ¨parentçš„ç›´æ¥å­èŠ‚ç‚¹é‡ŒæŒ‰uidæŸ¥æ‰¾CardView
     CardView* findCardViewIn(cocos2d::Node* parent, int uid) const;
-    // Ö´ĞĞ¡°ÓÃÊÖÅÆ¶¥ÅÆÌæ»»¶¥²¿Î»¡±µÄÁ÷³Ì£¨º¬²¹¼ä¡¢³·Ïú¼ÇÂ¼¡¢Ä£ĞÍ¸üĞÂ£©
+    // æ‰§è¡Œâ€œç”¨æ‰‹ç‰Œé¡¶ç‰Œæ›¿æ¢é¡¶éƒ¨ä½â€çš„æµç¨‹ï¼ˆå«è¡¥é—´ã€æ’¤é”€è®°å½•ã€æ¨¡å‹æ›´æ–°ï¼‰
     void replaceTopWithHandCard(int handIndex);
 };
