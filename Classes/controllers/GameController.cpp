@@ -79,8 +79,8 @@ void GameController::startGame(int levelId) {
 }
 
 /**
- * 在 StackView（下半区）里查找名为 "UndoButton" 的菜单项，并绑定点击回调到 undoOnce()
- * - GameView::setupInitialLayout 会把 Menu/Undo 挂在 StackView 上（z=100）
+ * 在 StackView（下半区）里查找名为 "UndoButton" 的菜单项，并绑定点击回调到undoOnce()
+ * - GameView::setupInitialLayout会把Menu/Undo挂在StackView 上（z=100）
  */
 void GameController::hookUndoButton() {
     // 绑定“回退”按钮
@@ -91,8 +91,7 @@ void GameController::hookUndoButton() {
         if (auto* menu = dynamic_cast<Menu*>(n)) {
             auto* btn = menu->getChildByName<MenuItemLabel*>("UndoButton");
             if (btn) {
-                // 注意 MenuItem 的回调签名：void(Ref*)，这里用 lambda 捕获 this
-                btn->setCallback([this](cocos2d::Ref*) { this->undoOnce(); });  // ✅ 带 Ref* 参数
+                btn->setCallback([this](cocos2d::Ref*) { this->undoOnce(); }); 
             }
         }
     }
@@ -103,7 +102,7 @@ void GameController::hookUndoButton() {
  * - 从 UndoManager::stack 弹出一条 UndoRecord
  * - 按记录类型分两种回滚路径：
  *   1) HAND_TO_TOP：把牌从“顶部区”撤回到“某个手牌列”；
- *   2) TABLE_TO_TOP：把牌从“顶部区”撤回到“桌面原位置”（可能涉及跨父节点搬运）。
+ *   2) TABLE_TO_TOP：把牌从“顶部区”撤回到“桌面原位置”。
  * - 同步更新 GameModel（例如 top、hand、table 等容器的元素）。
  */
 void GameController::undoOnce() {
@@ -137,8 +136,8 @@ void GameController::undoOnce() {
         }
         else {
             // 路径2：从“顶部”撤回到“桌面原坐标 rec.fromPos”
-            // - 需要把 mv 从 StackView 搬回 PlayFieldView（跨父节点）
-            // - 位置转换：先把 mv 在 StackView 下的位置转成世界，再转回 PlayFieldView 的局部
+            // - 需要把mv从StackView搬回PlayFieldView（跨父节点）
+            // - 位置转换：先把mv在StackView下的位置转成世界，再转回PlayFieldView的局部
             cocos2d::Vec2 world = _gameView->stackView()->convertToWorldSpace(mv->getPosition());
             cocos2d::Vec2 localInPlay = _gameView->playfieldView()->convertToNodeSpace(world);
 
@@ -147,7 +146,7 @@ void GameController::undoOnce() {
             _gameView->playfieldView()->addChild(mv); 
             mv->release();
 
-            // 先落地到转换位置，再补间回到“撤销记录的 fromPos”
+            // 先落地到转换位置，再补间回到“撤销记录的fromPos”
             mv->setPosition(localInPlay);
             mv->runAction(Sequence::create(
                 MoveTo::create(CardResConfig::kMoveDuration, rec.fromPos),
