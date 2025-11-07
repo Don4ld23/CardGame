@@ -2,16 +2,16 @@
 #include "configs/models/CardResConfig.h"
 #include "configs/models/CardSkinConfig.h"
 USING_NS_CC;
-//单张牌的可视化组件：掌管翻面、选中、高亮、可点击（触摸命中）等 UI 与交互。
-//不做规则判断，把点击通过回调上抛。（只回传 uid）
+//单张牌的可视化组件：掌管翻面、选中、高亮、可点击（触摸命中）等UI与交互。
+//不做规则判断，把点击通过回调上抛。（只回传uid）
 
 CardView* CardView::create(int uid) {
-    //工厂创建：此处不指定贴图，外观由后续 applyFace / applyFaceComposite 决定
+    //工厂创建：此处不指定贴图，外观由后续applyFace/applyFaceComposite决定
     auto v = new (std::nothrow) CardView();
     if (v && v->init()) {
         v->_uid = uid;
         v->autorelease();
-        v->enableTouch(); // 注册触摸（命中即上抛 uid）
+        v->enableTouch(); // 注册触摸
         return v;
     }
     CC_SAFE_DELETE(v);
@@ -22,7 +22,7 @@ CardView* CardView::create(int uid) {
 //    setTexture(up ? face : back);
 //}
 
-// —— 方案A：分层叠放（底板 + 数字 + 花色）
+//分层叠放（底板 + 数字 + 花色）
 void CardView::applyFaceComposite(int rank, int suit, bool faceUp) {
     removeAllChildren();// 先清理所有子节点，避免重复调用导致叠层
 
@@ -41,7 +41,7 @@ void CardView::applyFaceComposite(int rank, int suit, bool faceUp) {
     const cocos2d::Size sz = getContentSize();
 
     // ====== 中央大数字（仅保留数字，不再叠加大花色）======
-    // 资源由 CardSkinConfig 决定（可根据 rank/suit 切不同风格）
+    // 资源由CardSkinConfig决定（可根据rank/suit切不同风格）
     if (auto num = Sprite::create(CardSkinConfig::bigNumberTex(rank, suit))) {
         num->setAnchorPoint({ 0.5f, 0.5f });
         num->setPosition({ sz.width * 0.5f, sz.height * 0.50f }); 
@@ -87,16 +87,16 @@ void CardView::applyFaceComposite(int rank, int suit, bool faceUp) {
 
 
 void CardView::enableTouch() {
-    // 单点触摸监听；与项目现有输入模型一致：Began 命中即触发回调
+    // 单点触摸监听；与项目现有输入模型一致Began命中即触发回调
     auto l = EventListenerTouchOneByOne::create();
     l->setSwallowTouches(true);// 吞掉事件，避免穿透到下一层
     l->onTouchBegan = [this](Touch* t, Event*) {
         // 若该节点不在场景树中（没父节点），不处理
         if (!getParent()) return false;
-        Vec2 pLocal = getParent()->convertToNodeSpace(t->getLocation());// 将触摸点转换到“父节点坐标系”，与 getBoundingBox() 计算基准保持一致
+        Vec2 pLocal = getParent()->convertToNodeSpace(t->getLocation());// 将触摸点转换到“父节点坐标系”，与getBoundingBox()计算基准保持一致
         // 命中检测：使用自身在父坐标系下的包围盒
         if (getBoundingBox().containsPoint(pLocal)) {
-            if (_onClicked) _onClicked(_uid);// 命中即上抛 uid；外部根据 uid 处理匹配/回退等逻辑
+            if (_onClicked) _onClicked(_uid);// 命中即上抛uid；外部根据uid处理匹配/回退等逻辑
             return true;
         }
         return false;
