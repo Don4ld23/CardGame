@@ -5,8 +5,8 @@
 #include "views/StackView.h"
 #include "configs/models/CardResConfig.h"
 #include "managers/LayoutManager.h"
-#include "services/RuleService.h"// ¹æÔò£ºÊÇ·ñÏàÁÚ£¨adjacent£©
-#include "services/UndoService.h" // ³·Ïú£ºpush ¼ÇÂ¼
+#include "services/RuleService.h"// è§„åˆ™ï¼šæ˜¯å¦ç›¸é‚»ï¼ˆadjacentï¼‰
+#include "services/UndoService.h" // æ’¤é”€ï¼špush è®°å½•
 #include "configs/models/LevelConfig.h"
 
 USING_NS_CC;
@@ -17,12 +17,12 @@ PlayFieldController::PlayFieldController(GameModel& model,
     LayoutManager& layout,
     std::vector<UndoRecord>& undoStack)
     : _m(model), _pfView(view), _gameView(gameView), _layout(layout), _undo(undoStack) {
-    // ½«×ÀÃæÇøÊÓÍ¼µÄ¡°µã»÷×ÀÃæÅÆ»Øµ÷¡±°ó¶¨µ½±¾¿ØÖÆÆ÷
+    // å°†æ¡Œé¢åŒºè§†å›¾çš„â€œç‚¹å‡»æ¡Œé¢ç‰Œå›è°ƒâ€ç»‘å®šåˆ°æœ¬æ§åˆ¶å™¨
     _pfView.setOnCardClickCallback([this](int cardId) { handleCardClick(cardId); });
 }
 
 void PlayFieldController::initView(const LevelConfig& cfg) {
-    // ×ÀÃæÇø³õÊ¼äÖÈ¾£º°´ÕÕ cfg.playfield µÄÎ»ÖÃ£¬°Ñ _m.table ÖĞÇ° n ÕÅÅÆÊµÀı»¯Îª CardView
+    // æ¡Œé¢åŒºåˆå§‹æ¸²æŸ“ï¼šæŒ‰ç…§cfg.playfieldçš„ä½ç½®ï¼ŒæŠŠ _m.table ä¸­å‰nå¼ ç‰Œå®ä¾‹åŒ–ä¸ºCardView
     size_t n = std::min(_m.table.size(), cfg.playfield.size());
     for (size_t i = 0; i < n; ++i) {
         int uid = _m.table[i];
@@ -31,20 +31,18 @@ void PlayFieldController::initView(const LevelConfig& cfg) {
         CardView* cv = CardView::create(uid);
         if (!cv) { CCLOGERROR("Create CardView failed uid=%d", uid); continue; }
 
-        // ¡ï °ó¶¨µã»÷»Øµ÷µ½¿ØÖÆÆ÷
-        // ¡ï ÔÙ´Î°ó¶¨µã»÷»Øµ÷µ½¿ØÖÆÆ÷£¨Ë«±£ÏÕ£ºPlayFieldView Ò²»áÉÏÅ×£¬ÕâÀï CardView ×Ô¼ºÒ²ÄÜÉÏÅ×£©
         cv->setOnClicked([this](int clickedId) {
             this->handleCardClick(clickedId);
             });
 
         _pfView.addChild(cv);
-        cv->setPosition(cfg.playfield[i].Position);// °Úµ½¹Ø¿¨ÅäÖÃÖ¸¶¨µÄÎ»ÖÃ
-        cv->applyFaceComposite(cm.rank, cm.suit, true); // ÕıÃæ³¯ÉÏ£ºµ×°å+´óÊı×Ö+½Ç±ê»¨É«
+        cv->setPosition(cfg.playfield[i].Position);// æ‘†åˆ°å…³å¡é…ç½®æŒ‡å®šçš„ä½ç½®
+        cv->applyFaceComposite(cm.rank, cm.suit, true); // æ­£é¢æœä¸Šï¼šåº•æ¿+å¤§æ•°å­—+è§’æ ‡èŠ±è‰²
     }
 }
 
 CardView* PlayFieldController::findCardViewIn(Node* parent, int uid) const {
-    // ÔÚ parent µÄÖ±½Ó×Ó½ÚµãÀïÕÒ uid Æ¥ÅäµÄ CardView£¨·Çµİ¹é£©
+    // åœ¨parentçš„ç›´æ¥å­èŠ‚ç‚¹é‡Œæ‰¾uidåŒ¹é…çš„CardViewï¼ˆéé€’å½’ï¼‰
     const auto& children = parent->getChildren();
     for (size_t i = 0; i < children.size(); ++i) {
         Node* n = children.at(i);
@@ -57,26 +55,25 @@ CardView* PlayFieldController::findCardViewIn(Node* parent, int uid) const {
 }
 
 bool PlayFieldController::isOnTable(int cardId) const {
-    // ¸Ã uid ÊÇ·ñÈÔÔÚ¡°×ÀÃæÈİÆ÷¡±ÖĞ£¨Î´±»ÒÆ×ß£©
+    // è¯¥uidæ˜¯å¦ä»åœ¨â€œæ¡Œé¢å®¹å™¨â€ä¸­ï¼ˆæœªè¢«ç§»èµ°ï¼‰
     return std::find(_m.table.begin(), _m.table.end(), cardId) != _m.table.end();
 }
 
 void PlayFieldController::handleCardClick(int cardId) {
-    // µã»÷Ò»ÕÅ×ÀÃæÅÆºóµÄ´¦ÀíÁ÷³Ì£º
-    // 1) ÅÆ±ØĞë»¹ÔÚ×ÀÃæÉÏ£¨±ÜÃâÖØ¸´µã»÷/ÒÑÒÆ¶¯£©
+    //ç‰Œå¿…é¡»è¿˜åœ¨æ¡Œé¢ä¸Šï¼ˆé¿å…é‡å¤ç‚¹å‡»/å·²ç§»åŠ¨ï¼‰
     if (!isOnTable(cardId)) return;
 
-    // 2) ¶¥²¿Î»±ØĞë´æÔÚÒ»ÕÅ¡°²Î¿¼ÅÆ¡±£¨_m.top != -1£©
+    //é¡¶éƒ¨ä½å¿…é¡»å­˜åœ¨ä¸€å¼ â€œå‚è€ƒç‰Œâ€ï¼ˆ_m.top != -1ï¼‰
     if (_m.top == -1) return;
 
-    // 3) È¡µã»÷ÅÆÓë¶¥²¿ÅÆµÄÄ£ĞÍĞÅÏ¢
+    //å–ç‚¹å‡»ç‰Œä¸é¡¶éƒ¨ç‰Œçš„æ¨¡å‹ä¿¡æ¯
     const CardModel& c = _m.cards.at(cardId);
     const CardModel& top = _m.cards.at(_m.top);
 
-    // 4) ¹æÔòÅĞ¶Ï£ºÊÇ·ñ¡°µãÊıÏàÁÚ¡±£¨ÓÉ RuleService::adjacent ¶¨Òå£©
+    //è§„åˆ™åˆ¤æ–­ï¼šæ˜¯å¦ç‚¹æ•°ç›¸é‚»
     if (!RuleService::adjacent(c.rank, top.rank)) return;
 
-    // 5) ÈôÂú×ã¹æÔò£ºÕÒµ½ÕâÕÅÅÆÔÚ×ÀÃæÊÓÍ¼ÖĞµÄÊµÀı£¬²¢Ö´ĞĞ¡°ÒÆÈëÍĞÅÌ¶¥²¿¡±µÄ¶¯×÷
+    //è‹¥æ»¡è¶³è§„åˆ™ï¼šæ‰¾åˆ°è¿™å¼ ç‰Œåœ¨æ¡Œé¢è§†å›¾ä¸­çš„å®ä¾‹ï¼Œå¹¶æ‰§è¡Œâ€œç§»å…¥æ‰˜ç›˜é¡¶éƒ¨â€çš„åŠ¨ä½œ
     CardView* cv = findCardViewIn(&_pfView, cardId);
     if (cv) {
         replaceTrayWithPlayFieldCard(cardId, cv->getPosition());
@@ -84,34 +81,34 @@ void PlayFieldController::handleCardClick(int cardId) {
 }
 
 void PlayFieldController::replaceTrayWithPlayFieldCard(int cardId, const Vec2& fromPos) {
-    // 1) ÏÈ´´½¨Ò»Ìõ³·Ïú¼ÇÂ¼£¬²¢Ñ¹Èë³·ÏúÕ»
+    //å…ˆåˆ›å»ºä¸€æ¡æ’¤é”€è®°å½•ï¼Œå¹¶å‹å…¥æ’¤é”€æ ˆ
     UndoRecord rec; 
-    rec.type = UndoRecord::TABLE_TO_TOP;// ÀàĞÍ£º´Ó¡°×ÀÃæ ¡ú ¶¥²¿¡±
-    rec.movedUid = cardId; // ±¾´ÎÒÆ¶¯µÄÅÆ
-    rec.prevTopUid = _m.top;// ÒÆ¶¯Ç°¶¥²¿ÊÇÄÄ¸ö uid£¨ÓÃÓÚ³·Ïú»Ö¸´£© 
-    rec.fromPos = fromPos;// ¸ÃÅÆÔÚ×ÀÃæÊÓÍ¼ÖĞµÄÔ­Ê¼Î»ÖÃ£¨³·ÏúÊ±»Øµ½Õâ£©
+    rec.type = UndoRecord::TABLE_TO_TOP;// ç±»å‹ï¼šä»â€œæ¡Œé¢ â†’ é¡¶éƒ¨â€
+    rec.movedUid = cardId; // æœ¬æ¬¡ç§»åŠ¨çš„ç‰Œ
+    rec.prevTopUid = _m.top;// ç§»åŠ¨å‰é¡¶éƒ¨æ˜¯å“ªä¸ªuidï¼ˆç”¨äºæ’¤é”€æ¢å¤ï¼‰ 
+    rec.fromPos = fromPos;// è¯¥ç‰Œåœ¨æ¡Œé¢è§†å›¾ä¸­çš„åŸå§‹ä½ç½®ï¼ˆæ’¤é”€æ—¶å›åˆ°è¿™ï¼‰
     UndoService::push(_undo, rec);
 
-    // 2) ´ÓÄ£ĞÍµÄ×ÀÃæÈİÆ÷ÖĞÒÆ³ıÕâÕÅÅÆ
+    //ä»æ¨¡å‹çš„æ¡Œé¢å®¹å™¨ä¸­ç§»é™¤è¿™å¼ ç‰Œ
     std::vector<int>::iterator it = std::find(_m.table.begin(), _m.table.end(), cardId);
     if (it != _m.table.end()) _m.table.erase(it);
 
-    // 3) ÕÒµ½×ÀÃæÊÓÍ¼ÀïµÄ CardView Ö¸Õë£¨×¼±¸×ö¶¯»­£©
+    //æ‰¾åˆ°æ¡Œé¢è§†å›¾é‡Œçš„CardViewæŒ‡é’ˆï¼ˆå‡†å¤‡åšåŠ¨ç”»ï¼‰
     CardView* cv = findCardViewIn(&_pfView, cardId);
     if (!cv) return;
 
-    // 4) Èç¹û¶¥²¿Ä¿Ç°ÒÑÓĞÅÆ£¬ÏÈ°Ñ¾É¶¥ÅÆÊÓÍ¼¡°Òş²Ø¡±£¨ÈÔÁôÔÚÍĞÅÌ²ã£¬±ãÓÚ³·Ïú»Ö¸´£©
+    //å¦‚æœé¡¶éƒ¨ç›®å‰å·²æœ‰ç‰Œï¼Œå…ˆæŠŠæ—§é¡¶ç‰Œè§†å›¾â€œéšè—â€ï¼ˆä»ç•™åœ¨æ‰˜ç›˜å±‚ï¼Œä¾¿äºæ’¤é”€æ¢å¤ï¼‰
     if (_m.top != -1) {
         CardView* oldV = _gameView.findCardViewIn(_gameView.stackView(), _m.top);
         if (oldV) oldV->setVisible(false);
     }
 
-    // 5) Ö´ĞĞ¶¯»­£º°ÑÕâÕÅ×ÀÃæÅÆ´Ó×ÀÃæ PlayFieldView °áµ½ StackView µÄ¡°¶¥²¿Î»¡±
-    //  - PlayFieldView::playMoveToTrayAnimation ÄÚ²¿ÒÑ×ö£º
-    // ×ø±ê×ª»»(±¾µØ->ÊÀ½ç->ÍĞÅÌ¾Ö²¿)¡¢¿ç¸¸½Úµã°áÔË¡¢Tween Æ½ÒÆ
+    //æ‰§è¡ŒåŠ¨ç”»ï¼šæŠŠè¿™å¼ æ¡Œé¢ç‰Œä»æ¡Œé¢PlayFieldViewæ¬åˆ°StackViewçš„é¡¶éƒ¨ä½
+    // PlayFieldView::playMoveToTrayAnimationå†…éƒ¨å·²åšï¼š
+    // åæ ‡è½¬æ¢(æœ¬åœ°->ä¸–ç•Œ->æ‰˜ç›˜å±€éƒ¨)ã€è·¨çˆ¶èŠ‚ç‚¹æ¬è¿ã€Tween å¹³ç§»
     _pfView.playMoveToTrayAnimation(
         cv, fromPos, _gameView.stackView(), _layout.topPos(),
-        [this, cardId] { _m.top = cardId; }// ¶¯»­Íê³Éºó£¬¸üĞÂÄ£ĞÍµÄ¶¥²¿ uid
+        [this, cardId] { _m.top = cardId; }// åŠ¨ç”»å®Œæˆåï¼Œæ›´æ–°æ¨¡å‹çš„é¡¶éƒ¨uid
     );
 }
 
