@@ -3,27 +3,19 @@
 #include <vector>
 
 /**
- * ÃæÏò¡°³·Ïú¼ÇÂ¼Õ»¡±µÄ¾²Ì¬¹¤¾ß¼¯ºÏ£¬Ö±½Ó²Ù×÷Íâ²¿´«ÈëµÄ std::vector<UndoRecord>¡£
- * Óë UndoManager µÄÇø±ğ£º
- * - UndoManager ·â×°³ÉÒ»¸öÀà²¢³ÖÓĞÄÚ²¿Õ»£»
- * - UndoService ÔòÊÇ¡°ÎŞ×´Ì¬¡±µÄ¾²Ì¬¹¤¾ß£¬²Ù×÷µ÷ÓÃ·½´«ÈëµÄÈİÆ÷¡£
- *
- * Ìá¹©¹¦ÄÜ£º
- * - push(st, r)£º°ÑÒ»Ìõ³·Ïú¼ÇÂ¼Ñ¹Õ»£¨Ç°½ø²Ù×÷Íê³Éºóµ÷ÓÃ£©
- * - empty(st)  £º²éÑ¯Õ»ÊÇ·ñÎª¿Õ£¨ÓÃÓÚÅĞ¶ÏÄÜ·ñ³·Ïú£©
- * - pop(st)    £ºµ¯³ö×î½üÒ»Ìõ³·Ïú¼ÇÂ¼²¢·µ»Ø£¨Ö´ĞĞ³·ÏúÊ±µ÷ÓÃ£©
+ * é¢å‘â€œæ’¤é”€è®°å½•æ ˆâ€çš„é™æ€å·¥å…·é›†åˆï¼Œç›´æ¥æ“ä½œå¤–éƒ¨ä¼ å…¥çš„std::vector<UndoRecord>ã€‚
  */
 class UndoService {
 public:
-    // Ñ¹ÈëÒ»Ìõ³·Ïú¼ÇÂ¼
+    // å‹å…¥ä¸€æ¡æ’¤é”€è®°å½•
     static void push(std::vector<UndoRecord>& st, const UndoRecord& r) {
         st.push_back(r);
     }
-    // Õ»ÊÇ·ñÎª¿Õ
+    // æ ˆæ˜¯å¦ä¸ºç©º
     static bool empty(const std::vector<UndoRecord>& st) {
         return st.empty();
     }
-    // µ¯³ö×î½üÒ»Ìõ³·Ïú¼ÇÂ¼£¨µ÷ÓÃ·½¸ºÔğ¾İ´Ë»Ø¹öÊÓÍ¼ÓëÄ£ĞÍ£©
+    // å¼¹å‡ºæœ€è¿‘ä¸€æ¡æ’¤é”€è®°å½•ï¼ˆè°ƒç”¨æ–¹è´Ÿè´£æ®æ­¤å›æ»šè§†å›¾ä¸æ¨¡å‹ï¼‰
     static UndoRecord pop(std::vector<UndoRecord>& st) {
         UndoRecord r = st.back();
         st.pop_back();
