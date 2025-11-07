@@ -1,15 +1,12 @@
 #pragma once
 #include "cocos2d.h"
-//StackView ÊÇÏÂ°ëÇøµÄ¡°ÍÐÅÌ / ¶ÑÇø¡±ÈÝÆ÷ÊÓÍ¼£º
-// Ö»¸ºÔðÕ¼Î»£¨¿í¸ß¡¢Ãªµã£©£¬ÓÃÀ´³ÐÔØ°´Å¥£¨Èç¡°»ØÍË¡±£©ºÍ±»ÒÆ¶¯ÏÂÀ´µÄ¿¨ÅÆ½Úµã£»
-// ±¾Éí²»´¦Àí¹æÔòÓë¶¯»­¡£
 
 /**
- * - ÏÂ°ëÇø¡°¶ÑÇø/ÍÐÅÌ¡±µÄÊÓÍ¼ÈÝÆ÷£¨GameView ÖÐÎ»ÓÚÏÂ²¿£©¡£
- * - Ö÷ÒªÖ°Ôð£ºÌá¹©Ò»¸ö¹Ì¶¨³ß´çÓëÃªµãµÄ¿É¼û/ÃüÖÐ·¶Î§£¬ÓÃÓÚ³ÐÔØ£º
- *     1) UI£¨Èç»ØÍË°´Å¥£¬ÓÉ GameView::setupInitialLayout ¹ÒÔÚÕâÀï£©£»
- *     2) ±»´ÓÉÏ°ëÇø PlayFieldView °áÔËÏÂÀ´µÄ CardView£¨¼û playMoveToTrayAnimation£©¡£
- * - ²»°üº¬ÒµÎñÂß¼­¡¢¶¯»­ÓëÊäÈë´¦Àí£»´¿ÈÝÆ÷½Úµã¡£
+ * ä¸‹åŠåŒºâ€œå †åŒº/æ‰˜ç›˜â€çš„è§†å›¾å®¹å™¨ï¼ˆGameViewä¸­ä½äºŽä¸‹éƒ¨ï¼‰ã€‚
+ * ä¸»è¦èŒè´£ï¼šæä¾›ä¸€ä¸ªå›ºå®šå°ºå¯¸ä¸Žé”šç‚¹çš„å¯è§/å‘½ä¸­èŒƒå›´ï¼Œç”¨äºŽæ‰¿è½½ï¼š
+ *   1) UIï¼ˆå¦‚å›žé€€æŒ‰é’®ï¼Œç”±GameView::setupInitialLayoutæŒ‚åœ¨è¿™é‡Œï¼‰ï¼›
+ *   2) è¢«ä»Žä¸ŠåŠåŒºPlayFieldViewæ¬è¿ä¸‹æ¥çš„CardViewã€‚
+ * ä¸åŒ…å«ä¸šåŠ¡é€»è¾‘ã€åŠ¨ç”»ä¸Žè¾“å…¥å¤„ç†ï¼›çº¯å®¹å™¨èŠ‚ç‚¹ã€‚
  */
 class StackView : public cocos2d::Node {
 public:
