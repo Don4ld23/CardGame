@@ -3,38 +3,26 @@
 #include "configs/models/CardResConfig.h"
 
 /**
- * ¼«¼ò¶¯»­·â×°£ºÄ¿Ç°Ö»Ìá¹©¡°MoveTo + ½áÊø»Øµ÷¡±¡£
- * Éè¼ÆÄ¿µÄ£º
- * - Í³Ò»¶¯»­Ê±³¤£ºÊ¹ÓÃ CardResConfig::kMoveDuration ×÷ÎªÈ«¾ÖÅäÖÃ£»
- * - Í³Ò»»Øµ÷´¥·¢£º¶¯»­½áÊøºóÈôÌá¹©ÁË done() Ôòµ÷ÓÃ£¨¿ÕÔòºöÂÔ£©£»
- * - ½µµÍ¿ØÖÆÆ÷ÀïÖ±½ÓÆ´½Ó Sequence/CallFunc µÄÖØ¸´´úÂë¡£
- *
- * Ê¹ÓÃÊ¾Àı£º
- *   TweenService::moveTo(cardView, layout.topPos(), []{
- *       // ¶¯»­Íê³ÉºóµÄ×´Ì¬¸üĞÂ...
- *   });
+ * æç®€åŠ¨ç”»å°è£…ï¼šç›®å‰åªæä¾›â€œMoveTo+ç»“æŸå›è°ƒâ€ã€‚
+ * è®¾è®¡ç›®çš„ï¼š
+ * - ç»Ÿä¸€åŠ¨ç”»æ—¶é•¿ï¼šä½¿ç”¨CardResConfig::kMoveDurationä½œä¸ºå…¨å±€é…ç½®ï¼›
+ * - ç»Ÿä¸€å›è°ƒè§¦å‘ï¼šåŠ¨ç”»ç»“æŸåè‹¥æä¾›äº†done()åˆ™è°ƒç”¨ï¼ˆç©ºåˆ™å¿½ç•¥ï¼‰ï¼›
+ * - é™ä½æ§åˆ¶å™¨é‡Œç›´æ¥æ‹¼æ¥Sequence/CallFuncçš„é‡å¤ä»£ç ã€‚
  */
-// ÇáÁ¿¶¯»­·â×°£º½ö·â×° MoveTo + »Øµ÷£¬±ãÓÚÍ³Ò»¶¯»­Ê±³¤
 class TweenService {
 public:
-    /**
-    * ½«½áµã n Æ½ÒÆµ½ dst£¬²¢ÔÚÍê³Éºóµ÷ÓÃ done£¨Èô·Ç¿Õ£©
-    * @param n     ĞèÒªÒÆ¶¯µÄ½áµã£¨Node*£©£»ÈôÎª nullptr£¬Ö±½ÓÍ¬²½µ÷ÓÃ done ²¢·µ»Ø
-    * @param dst   Ä¿±ê×ø±ê£¨¸¸×ø±êÏµÏÂ£©
-    * @param done  ¿ÉÑ¡µÄÍê³É»Øµ÷£¨È±Ê¡Îª¿Õ£©
-    */
     static void moveTo(cocos2d::Node* n,
         const cocos2d::Vec2& dst,
         const std::function<void()>& done = std::function<void()>())
     {
         using namespace cocos2d;
 
-        // ÅĞ¿Õ±£»¤£ºÃ»ÓĞ½ÚµãÊ±²»×ö¶¯»­£¬Ö±½Ó´¥·¢»Øµ÷£¨ÈôÓĞ£©
+        // åˆ¤ç©ºä¿æŠ¤ï¼šæ²¡æœ‰èŠ‚ç‚¹æ—¶ä¸åšåŠ¨ç”»ï¼Œç›´æ¥è§¦å‘å›è°ƒï¼ˆè‹¥æœ‰ï¼‰
         if (!n) { if (done) done(); return; }
-        // ÔËĞĞÒ»¸ö MoveTo£¬È»ºóÔÚ½áÊøÊ±µ÷ÓÃ done
+        // è¿è¡Œä¸€ä¸ªMoveToï¼Œç„¶ååœ¨ç»“æŸæ—¶è°ƒç”¨done
         n->runAction(Sequence::create(
-            MoveTo::create(CardResConfig::kMoveDuration, dst),// Í³Ò»³ÖĞøÊ±¼ä
-            CallFunc::create([done] { if (done) done(); }),// ½áÊø»Øµ÷£¨¿É¿Õ£©
+            MoveTo::create(CardResConfig::kMoveDuration, dst),// ç»Ÿä¸€æŒç»­æ—¶é—´
+            CallFunc::create([done] { if (done) done(); }),// ç»“æŸå›è°ƒï¼ˆå¯ç©ºï¼‰
             nullptr
         ));
     }
