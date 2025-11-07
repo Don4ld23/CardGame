@@ -3,14 +3,10 @@
 //把“点数 + 花色”映射为具体资源路径：大数字、小数字、花色图标。
 
 /**
- * CardSkinConfig
- * --------------
- * 皮肤资源映射层：根据 rank/suit 返回具体 PNG 路径（相对 Resources/）。
+ * 皮肤资源映射层：根据rank/suit返回具体PNG路径（相对Resources/）。
  * - 红黑映射规则：梅花/黑桃 -> black；方块/红桃 -> red
- * - 只返回路径字符串，不做 createSprite；由 View 决定如何加载与缩放
+ * - 只返回路径字符串，不做createSprite；由View决定如何加载与缩放
  */
-
- // 若你的项目里已有统一的枚举头，这里可以直接 include；下面是兜底定义：
 enum CardSuitType {
     CST_NONE = -1,
     CST_CLUBS = 0,     // 梅花 ♣
@@ -22,7 +18,7 @@ enum CardSuitType {
 
 enum CardFaceType {
     CFT_NONE = -1,
-    CFT_ACE = 0,  // 注意：你的运行时可能用 1..13；我们在 rankToken() 做了兼容
+    CFT_ACE = 0,  
     CFT_TWO,
     CFT_THREE,
     CFT_FOUR,
@@ -39,7 +35,6 @@ enum CardFaceType {
 };
 
 struct CardSkinConfig {
-
     // 把 rank（0..12 或 1..13）统一映射成 "A","2",...,"10","J","Q","K"
     static std::string rankToken(int rank) {
         int r = rank;
