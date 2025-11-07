@@ -6,10 +6,10 @@ USING_NS_CC;
 
 bool PlayFieldView::init() {
     if (!Node::init()) return false;
-    // Éè¶¨×ÔÉíµÄÄÚÈİ³ß´çÎªÉÏ°ëÇø´óĞ¡£¬±ãÓÚÍ³Ò»ÃüÖĞ/²¼¾Ö£¨Ãªµã²ÉÓÃ¾ÓÖĞ£©
+    // è®¾å®šè‡ªèº«çš„å†…å®¹å°ºå¯¸ä¸ºä¸ŠåŠåŒºå¤§å°ï¼Œä¾¿äºç»Ÿä¸€å‘½ä¸­/å¸ƒå±€
     setContentSize({ (float)CardResConfig::kDesignW, (float)CardResConfig::kPlayfieldH });
     setAnchorPoint({ 0.5f, 0.5f });
-    // ×¢²á´¥Ãş¼àÌı£¨ÄÚ²¿¸ºÔğ°ÑÃüÖĞµÄ CardView µÄ uid »Øµ÷³öÈ¥£©
+    // æ³¨å†Œè§¦æ‘¸ç›‘å¬ï¼ˆå†…éƒ¨è´Ÿè´£æŠŠå‘½ä¸­çš„CardViewçš„uidå›è°ƒå‡ºå»ï¼‰
     enableTouch();
     return true;
 }
@@ -18,22 +18,22 @@ void PlayFieldView::enableTouch() {
     auto l = EventListenerTouchOneByOne::create();
     l->setSwallowTouches(true);
     l->onTouchBegan = [this](Touch* t, Event*) {
-        // ½«´¥Ãşµã×ª»»µ½±¾ÊÓÍ¼µÄ¾Ö²¿×ø±êÏµ£¬¼´PlayFieldView µÄ±¾µØ×ø±ê
+        // å°†è§¦æ‘¸ç‚¹è½¬æ¢åˆ°æœ¬è§†å›¾çš„å±€éƒ¨åæ ‡ç³»ï¼Œå³PlayFieldView çš„æœ¬åœ°åæ ‡
         Vec2 lp = convertToNodeSpace(t->getLocation());
-        // ´ÓÉÏÍùÏÂÃüÖĞ£¬±£Ö¤×îÉÏ²ãÅÆÓÅÏÈ
-        // ´ÓÉÏÍùÏÂÃüÖĞ£¬±£Ö¤×îÉÏ²ã£¨¸ü¸ß z-order£©µÄÅÆÓÅÏÈ±»µãµ½
+        // ä»ä¸Šå¾€ä¸‹å‘½ä¸­ï¼Œä¿è¯æœ€ä¸Šå±‚ç‰Œä¼˜å…ˆ
+        // ä»ä¸Šå¾€ä¸‹å‘½ä¸­ï¼Œä¿è¯æœ€ä¸Šå±‚ï¼ˆæ›´é«˜ z-orderï¼‰çš„ç‰Œä¼˜å…ˆè¢«ç‚¹åˆ°
         for (int i = (int)getChildrenCount() - 1; i >= 0; --i) {
             if (auto* cv = dynamic_cast<CardView*>(getChildren().at(i))) {
-                // Ê¹ÓÃÃ¿ÕÅ¿¨ÅÆÔÚ±¾ÊÓÍ¼×ø±êÏµ£¬¼´PlayFieldView µÄ±¾µØ×ø±êÏÂµÄ°üÎ§ºĞ×öÃüÖĞ£¨getBoundingBox()·µ»ØµÄÊÇÔÚ¸¸×ø±êÏµÖĞ¡£
-                // CardView µÄ¸¸Ç×¾ÍÊÇ PlayFieldView£©
-                if (cv->getBoundingBox().containsPoint(lp)) {//ÅĞ¶ÏµãlpÊÇ·ñÂäÔÚÕâ¸ö¾ØĞÎÄÚ£¨Í¬Ò»×ø±êÏµÏÂ£©
-                    // ÃüÖĞ¼´ÉÏÅ×¸ÃÅÆ uid£¬Íâ²¿¸ù¾İ uid ´¦ÀíÆ¥Åä/»ØÍËµÈÂß¼­
-                    if (_onCardClick) _onCardClick(cv->uid());//µ÷ÓÃ±£´æµÄ»Øµ÷º¯Êı
+                // ä½¿ç”¨æ¯å¼ å¡ç‰Œåœ¨æœ¬è§†å›¾åæ ‡ç³»ï¼Œå³PlayFieldView çš„æœ¬åœ°åæ ‡ä¸‹çš„åŒ…å›´ç›’åšå‘½ä¸­ï¼ˆgetBoundingBox()è¿”å›çš„æ˜¯åœ¨çˆ¶åæ ‡ç³»ä¸­ã€‚
+                // CardView çš„çˆ¶äº²å°±æ˜¯ PlayFieldViewï¼‰
+                if (cv->getBoundingBox().containsPoint(lp)) {//åˆ¤æ–­ç‚¹lpæ˜¯å¦è½åœ¨è¿™ä¸ªçŸ©å½¢å†…ï¼ˆåŒä¸€åæ ‡ç³»ä¸‹ï¼‰
+                    // å‘½ä¸­å³ä¸ŠæŠ›è¯¥ç‰Œuidï¼Œå¤–éƒ¨æ ¹æ®uidå¤„ç†åŒ¹é…/å›é€€ç­‰é€»è¾‘
+                    if (_onCardClick) _onCardClick(cv->uid());//è°ƒç”¨ä¿å­˜çš„å›è°ƒå‡½æ•°
                     return true;
                 }
             }
         }
-        return false;// Î´ÃüÖĞÈÎºÎ¿¨ÅÆ£¬²»Ïû·Ñ
+        return false;// æœªå‘½ä¸­ä»»ä½•å¡ç‰Œ
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(l, this);
 }
@@ -43,22 +43,17 @@ void PlayFieldView::playMoveToTrayAnimation(CardView* cv,
     Node* trayParent,
     const Vec2& trayLocalPos,
     const std::function<void()>& onDone) {
-    // 1) Î»ÖÃ¿Õ¼ä×ª»»£º
-    //    - ÏÈ°Ñ¡°±¾ÊÓÍ¼¾Ö²¿×ø±êfromPos×ªµ½ÊÀ½ç×ø±ê£»
-    //    - ÔÙ´ÓÊÀ½ç×ø±ê×ªµ½¡°ÍĞÅÌ¸¸½Úµã trayParent µÄ¾Ö²¿×ø±ê¡±¡£
-    // °ÑÊÀ½ç×ø±ê×ª»»µ½ÍĞÅÌ¸¸½Úµã¿Õ¼ä£¬ÔÙ°áÔË½Úµã
     Vec2 world = convertToWorldSpace(fromPos);
     Vec2 localInTray = trayParent->convertToNodeSpace(world);
 
-    // 2) ¿ç¸¸½Úµã°áÔË£º
-    //    retain/release ±£»¤¶ÔÏóÉúÃüÖÜÆÚ£¨±ÜÃâ removeFromParent ÆÚ¼ä±»ÊÍ·Å£©
+    // è·¨çˆ¶èŠ‚ç‚¹æ¬è¿ï¼š
     cv->retain();
     cv->removeFromParent();
     trayParent->addChild(cv);
     cv->release();
 
-    // 3) ÔÚĞÂ¸¸½ÚµãÏÂ£¬ÏÈÂäÔÚ¡°×ª»»ºóµÄÆğµã¡±ÔÙ×öÎ»ÒÆ¶¯»­µ½Ä¿±êÎ»ÖÃ
+    // 3) åœ¨æ–°çˆ¶èŠ‚ç‚¹ä¸‹ï¼Œå…ˆè½åœ¨â€œè½¬æ¢åçš„èµ·ç‚¹â€å†åšä½ç§»åŠ¨ç”»åˆ°ç›®æ ‡ä½ç½®
     cv->setPosition(localInTray);
-    // 4) Ê¹ÓÃ TweenService Ö´ĞĞÆ½ÒÆ¶¯»­£¬Íê³Éºó»Øµ÷ onDone
+    // 4) ä½¿ç”¨ TweenService æ‰§è¡Œå¹³ç§»åŠ¨ç”»ï¼Œå®Œæˆåå›è°ƒonDone
     TweenService::moveTo(cv, trayLocalPos, onDone);
 }
