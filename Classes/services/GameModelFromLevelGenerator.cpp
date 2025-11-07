@@ -1,42 +1,42 @@
 #include "services/GameModelFromLevelGenerator.h"
 
-//CardFace(0..12) ¡ú rank(1..13)
-//ËµÃ÷£º¹Ø¿¨ÀïµÄCardFaceÍ¨³£´Ó0¿ªÊ¼£¨0..12£©£¬¶øGameModelÊ¹ÓÃ1..13£¨A..K£©¡£
-//Òò´ËÕâÀï×öÒ»¸ö¼òµ¥µÄ¡°ÃæÖµ ¡ú µãÊı¡±Ó³Éä¡£
+//CardFace(0..12) â†’ rank(1..13)
+//å…³å¡é‡Œçš„CardFaceé€šå¸¸ä»0å¼€å§‹ï¼ˆ0..12ï¼‰ï¼Œè€ŒGameModelä½¿ç”¨1..13ï¼ˆA..Kï¼‰ã€‚
+//è¿™é‡Œåšä¸€ä¸ªç®€å•çš„â€œé¢å€¼ â†’ ç‚¹æ•°â€æ˜ å°„ã€‚
 static inline int faceToRank(int faceType) { 
     return faceType + 1; 
 }
 
 void GameModelFromLevelGenerator::build(const LevelConfig& cfg, GameModel& gm) {
-    //ÖØÖÃÔËĞĞÊ±Ä£ĞÍ
-    gm.cards.clear();// uid ¡ú CardModelµÄ×Öµä
-    gm.table.clear();// ×ÀÃæÇø£¨Playfield£©ÖĞÅÆµÄuidÁĞ±í
-    gm.hand.clear();// ÊÖÅÆÁĞ£¨vector< vector<uid> >£©
-    gm.top = -1;// ¶¥²¿ÅÆ uid£¬-1±íÊ¾ÎŞ
+    //é‡ç½®è¿è¡Œæ—¶æ¨¡å‹
+    gm.cards.clear();// uid â†’ CardModelçš„å­—å…¸
+    gm.table.clear();// æ¡Œé¢åŒºï¼ˆPlayfieldï¼‰ä¸­ç‰Œçš„uidåˆ—è¡¨
+    gm.hand.clear();// æ‰‹ç‰Œåˆ—ï¼ˆvector< vector<uid> >ï¼‰
+    gm.top = -1;// é¡¶éƒ¨ç‰Œ uidï¼Œ-1è¡¨ç¤ºæ— 
 
-    //Éú³É×ÀÃæÇø£¨Playfield£©
-    //±éÀú¹Ø¿¨ÅäÖÃÀïµÄplayfield²ÛÎ»£¬ÎªÃ¿Ò»¸ñÉú³ÉÒ»ÕÅÅÆ£º
-    //·ÖÅäĞÂµÄuid£¨gm.genUid()£©
-    //ÓÉ CardFace / CardSuitÉú³ÉCardModel£¨µãÊırank¡¢»¨É«suit£©
-    //¼Çµ½gm.cards£¬²¢°ÑuidÍÆÈëgm.table
+    //ç”Ÿæˆæ¡Œé¢åŒºï¼ˆPlayfieldï¼‰
+    //éå†å…³å¡é…ç½®é‡Œçš„playfieldæ§½ä½ï¼Œä¸ºæ¯ä¸€æ ¼ç”Ÿæˆä¸€å¼ ç‰Œï¼š
+    //åˆ†é…æ–°çš„uidï¼ˆgm.genUid()ï¼‰
+    //ç”± CardFace / CardSuitç”ŸæˆCardModelï¼ˆç‚¹æ•°rankã€èŠ±è‰²suitï¼‰
+    //è®°åˆ°gm.cardsï¼Œå¹¶æŠŠuidæ¨å…¥gm.table
     for (size_t i = 0; i < cfg.playfield.size(); ++i) {
         const LevelCardCfg& c = cfg.playfield[i];
 
         CardModel m;
-        m.uid = gm.genUid();// È«¾ÖÎ¨Ò»ID
-        m.rank = faceToRank(c.CardFace);// 0..12 ¡ú 1..13
-        m.suit = c.CardSuit;// »¨É«£¨Óë¹Ø¿¨Ã¶¾Ù±£³ÖÒ»ÖÂ£©
-        m.faceUp = true;// ³õÊ¼È«²¿ÕıÃæ³¯ÉÏ
+        m.uid = gm.genUid();// å…¨å±€å”¯ä¸€ID
+        m.rank = faceToRank(c.CardFace);// 0..12 â†’ 1..13
+        m.suit = c.CardSuit;// èŠ±è‰²ï¼ˆä¸å…³å¡æšä¸¾ä¿æŒä¸€è‡´ï¼‰
+        m.faceUp = true;// åˆå§‹å…¨éƒ¨æ­£é¢æœä¸Š
 
-        gm.cards[m.uid] = m; // ¼ÇÂ¼µ½¡°uid¡úÅÆÄ£ĞÍ¡±µÄ±í
-        gm.table.push_back(m.uid); // ·Åµ½×ÀÃæÈİÆ÷
+        gm.cards[m.uid] = m; // è®°å½•åˆ°â€œuidâ†’ç‰Œæ¨¡å‹â€çš„è¡¨
+        gm.table.push_back(m.uid); // æ”¾åˆ°æ¡Œé¢å®¹å™¨
     }
 
-    //Éú³É¶ÑÅÆÇø£¨Stack£©
-    //cfg.stackµÄÇ°n-1¸öÓÃÓÚ¡°ÊÖÅÆ²Û¡±£»×îºó1¸öÓÃÓÚ¡°³õÊ¼¶¥²¿ÅÆ(top)¡±
+    //ç”Ÿæˆå †ç‰ŒåŒºï¼ˆStackï¼‰
+    //cfg.stackçš„å‰n-1ä¸ªç”¨äºâ€œæ‰‹ç‰Œæ§½â€ï¼›æœ€å1ä¸ªç”¨äºâ€œåˆå§‹é¡¶éƒ¨ç‰Œ(top)â€
     const int n = (int)cfg.stack.size();
     if (n > 0) {
-        gm.hand.resize(n - 1);// ÊÖÅÆÁĞÊıÁ¿ = n - 1
+        gm.hand.resize(n - 1);// æ‰‹ç‰Œåˆ—æ•°é‡ = n - 1
 
         for (int i = 0; i < n; ++i) {
             const LevelCardCfg& s = cfg.stack[i];
@@ -47,11 +47,11 @@ void GameModelFromLevelGenerator::build(const LevelConfig& cfg, GameModel& gm) {
             m.faceUp = true;
             gm.cards[m.uid] = m;
 
-            if (i == n - 1) { //×îºóÒ»¸ñ ¡ú ³õÊ¼¶¥²¿ÅÆ
+            if (i == n - 1) { //æœ€åä¸€æ ¼ â†’ åˆå§‹é¡¶éƒ¨ç‰Œ
                 gm.top = m.uid; 
             }
-            else {//ÆäÓàÃ¿¸öÊÖÅÆ²ÛÒ»¸ö¶¥ÅÆ£¨push_backµ½¶ÔÓ¦ÁĞ£©
-                gm.hand[i].push_back(m.uid); // Ã¿¸öÊÖÅÆ²ÛÒ»¸ö
+            else {//å…¶ä½™æ¯ä¸ªæ‰‹ç‰Œæ§½ä¸€ä¸ªé¡¶ç‰Œï¼ˆpush_backåˆ°å¯¹åº”åˆ—ï¼‰
+                gm.hand[i].push_back(m.uid); // æ¯ä¸ªæ‰‹ç‰Œæ§½ä¸€ä¸ª
             }
         }
     }
