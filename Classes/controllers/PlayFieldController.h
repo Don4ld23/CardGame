@@ -4,50 +4,45 @@
 #include "models/UndoModel.h"
 #include <vector>
 
-//PlayFieldController ÊÇ×ÀÃæÇø£¨PlayFieldView£©µÄ¿ØÖÆÆ÷£º
-//¸ºÔğ°Ñ GameModel ÖĞµÄ¡°×ÀÃæÅÆ£¨table£©¡±äÖÈ¾µ½ PlayFieldView£»
-//´¦Àíµã»÷×ÀÃæÅÆµÄÊÂ¼ş£»ÔÚÂú×ã¹æÔòÊ±£¬°Ñ×ÀÃæÅÆÒÆ¶¯µ½ÍĞÅÌ¶¥²¿Î»£¬²¢¼ÇÂ¼** ³·Ïú£¨Undo£©** ĞÅÏ¢£¬
-//Í¬Ê±¸üĞÂ GameModel£¨table¡¢top µÈ×Ö¶Î£©¡£
-
-class PlayFieldView;// ×ÀÃæÇøÊÓÍ¼£¨ÉÏ°ëÇø£©
-class GameView;// ¶¥²ãÊÓÍ¼ÈİÆ÷£¨Ìá¹© stack/playfield ·ÃÎÊ & ¹¤¾ß·½·¨£©
-class CardView;// µ¥ÕÅÅÆÊÓÍ¼
-class LayoutManager;// ²¼¾Ö¹ÜÀíÆ÷£¨Ìá¹©Î»ÖÃµÈ£©
-struct LevelConfig; // ¹Ø¿¨ÅäÖÃ
+class PlayFieldView;// æ¡Œé¢åŒºè§†å›¾ï¼ˆä¸ŠåŠåŒºï¼‰
+class GameView;// é¡¶å±‚è§†å›¾å®¹å™¨ï¼ˆæä¾›stack/playfieldè®¿é—® & å·¥å…·æ–¹æ³•ï¼‰
+class CardView;// å•å¼ ç‰Œè§†å›¾
+class LayoutManager;// å¸ƒå±€ç®¡ç†å™¨ï¼ˆæä¾›ä½ç½®ç­‰ï¼‰
+struct LevelConfig; // å…³å¡é…ç½®
 
 /**
- * - ¸ºÔğ¡°×ÀÃæÇø¡±µÄ¿ØÖÆÂß¼­£º
- *   1) initView£º¸ù¾İ¹Ø¿¨ÓëÄ£ĞÍ£¬°Ñ×ÀÃæÅÆÊµÀı»¯µ½ PlayFieldView£»
- *   2) handleCardClick£º´¦Àíµã»÷×ÀÃæÅÆ£»ÒÀ¾İ RuleService ÅĞ¶ÏÊÇ·ñÄÜÓë¡°¶¥²¿ÅÆ(top)¡±ÏàÁÚ£»
- *   3) replaceTrayWithPlayFieldCard£ºÂú×ã¹æÔòºó£¬°Ñ×ÀÃæÅÆÒÆÈëÍĞÅÌ¶¥²¿Î»£¨º¬ Undo ¼ÇÂ¼ÓëÄ£ĞÍ¸üĞÂ£©¡£
- * - ×¢Òâ£º²»Ö±½Ó¹ÜÀíÍĞÅÌÇøÊÓÍ¼£¬µ«»áµ÷ÓÃ GameView/StackView À´ÊµÏÖ¿ç¸¸½ÚµãÒÆ¶¯¡£
+ * - è´Ÿè´£â€œæ¡Œé¢åŒºâ€çš„æ§åˆ¶é€»è¾‘ï¼š
+ *   1) initViewï¼šæ ¹æ®å…³å¡ä¸æ¨¡å‹ï¼ŒæŠŠæ¡Œé¢ç‰Œå®ä¾‹åŒ–åˆ° PlayFieldViewï¼›
+ *   2) handleCardClickï¼šå¤„ç†ç‚¹å‡»æ¡Œé¢ç‰Œï¼›ä¾æ® RuleService åˆ¤æ–­æ˜¯å¦èƒ½ä¸â€œé¡¶éƒ¨ç‰Œ(top)â€ç›¸é‚»ï¼›
+ *   3) replaceTrayWithPlayFieldCardï¼šæ»¡è¶³è§„åˆ™åï¼ŒæŠŠæ¡Œé¢ç‰Œç§»å…¥æ‰˜ç›˜é¡¶éƒ¨ä½ï¼ˆå« Undo è®°å½•ä¸æ¨¡å‹æ›´æ–°ï¼‰ã€‚
+ * - æ³¨æ„ï¼šä¸ç›´æ¥ç®¡ç†æ‰˜ç›˜åŒºè§†å›¾ï¼Œä½†ä¼šè°ƒç”¨ GameView/StackView æ¥å®ç°è·¨çˆ¶èŠ‚ç‚¹ç§»åŠ¨ã€‚
  */
 class PlayFieldController {
 public:
-    // ¹¹Ôì£º³ÖÓĞÄ£ĞÍ / ÊÓÍ¼ / ¶¥²ãÊÓÍ¼ / ²¼¾Ö / ³·ÏúÕ»µÄÒıÓÃ
+    // æ„é€ ï¼šæŒæœ‰æ¨¡å‹ / è§†å›¾ / é¡¶å±‚è§†å›¾ / å¸ƒå±€ / æ’¤é”€æ ˆçš„å¼•ç”¨
     PlayFieldController(GameModel& model,
         PlayFieldView& view,
         GameView& gameView,
         LayoutManager& layout,
         std::vector<UndoRecord>& undoStack);
 
-    // ³õÊ¼»¯×ÀÃæÇøÊÓÍ¼£º°´¹Ø¿¨ÅäÖÃ°Ñ _m.table ÖĞµÄ¿¨ÅÆäÖÈ¾µ½ PlayFieldView
+    // åˆå§‹åŒ–æ¡Œé¢åŒºè§†å›¾ï¼šæŒ‰å…³å¡é…ç½®æŠŠ_m.tableä¸­çš„å¡ç‰Œæ¸²æŸ“åˆ°PlayFieldView
     void initView(const LevelConfig& cfg);
-    // ÏìÓ¦Ò»´Î×ÀÃæÅÆµã»÷£¨cardId = ÅÆµÄ uid£©
+    // å“åº”ä¸€æ¬¡æ¡Œé¢ç‰Œç‚¹å‡»ï¼ˆcardId = ç‰Œçš„uidï¼‰
     void handleCardClick(int cardId);
-    // ½«×ÀÃæÅÆÌæ»»µ½ÍĞÅÌ¶¥²¿£º´Ó playfield ÒÆµ½ stack ¶¥²¿Î»£¨²¢¼ÇÂ¼³·Ïú£©
+    // å°†æ¡Œé¢ç‰Œæ›¿æ¢åˆ°æ‰˜ç›˜é¡¶éƒ¨ï¼šä»playfieldç§»åˆ°stacké¡¶éƒ¨ä½ï¼ˆå¹¶è®°å½•æ’¤é”€ï¼‰
     void replaceTrayWithPlayFieldCard(int cardId, const cocos2d::Vec2& fromPos);
 
 private:
-    // ÒıÓÃÍâ²¿Êı¾İ/¶ÔÏó£¨Controller ²»ÓµÓĞÕâĞ©¶ÔÏóµÄÉúÃüÖÜÆÚ£©
-    GameModel& _m;// Êı¾İÄ£ĞÍ£¨cards¡¢table¡¢hand¡¢top µÈ£©
-    PlayFieldView& _pfView; // ×ÀÃæÇøÊÓÍ¼
-    GameView& _gameView;// ¶¥²ãÊÓÍ¼ÈİÆ÷£¨Ìá¹© findCardViewIn/stack/playfield£©
-    LayoutManager& _layout;// ²¼¾Ö£¨ÊÖÅÆ²ÛÎ»¡¢¶¥²¿Î»µÈÎ»ÖÃÌá¹©£©
-    std::vector<UndoRecord>& _undo;// ³·ÏúÕ»£¨¼ÇÂ¼¿É»Ø¹öµÄĞÅÏ¢£©
+    // å¼•ç”¨å¤–éƒ¨æ•°æ®/å¯¹è±¡ï¼ˆControllerä¸æ‹¥æœ‰è¿™äº›å¯¹è±¡çš„ç”Ÿå‘½å‘¨æœŸï¼‰
+    GameModel& _m;// æ•°æ®æ¨¡å‹ï¼ˆcardsã€tableã€handã€top ç­‰ï¼‰
+    PlayFieldView& _pfView; // æ¡Œé¢åŒºè§†å›¾
+    GameView& _gameView;// é¡¶å±‚è§†å›¾å®¹å™¨ï¼ˆæä¾›findCardViewIn/stack/playfieldï¼‰
+    LayoutManager& _layout;// å¸ƒå±€ï¼ˆæ‰‹ç‰Œæ§½ä½ã€é¡¶éƒ¨ä½ç­‰ä½ç½®æä¾›ï¼‰
+    std::vector<UndoRecord>& _undo;// æ’¤é”€æ ˆï¼ˆè®°å½•å¯å›æ»šçš„ä¿¡æ¯ï¼‰
 
-    // ¹¤¾ß£ºÔÚ parent µÄÖ±½Ó×Ó½ÚµãÖĞ°´ uid ²éÕÒ CardView£¨·Çµİ¹é£©
+    // å·¥å…·ï¼šåœ¨parentçš„ç›´æ¥å­èŠ‚ç‚¹ä¸­æŒ‰uidæŸ¥æ‰¾ CardViewï¼ˆéé€’å½’ï¼‰
     CardView* findCardViewIn(cocos2d::Node* parent, int uid) const;
-    // ¹¤¾ß£º¸ÃÅÆÊÇ·ñ»¹ÔÚ×ÀÃæÈİÆ÷ _m.table ÖĞ
+    // å·¥å…·ï¼šè¯¥ç‰Œæ˜¯å¦è¿˜åœ¨æ¡Œé¢å®¹å™¨_m.table ä¸­
     bool isOnTable(int cardId) const;
 };
