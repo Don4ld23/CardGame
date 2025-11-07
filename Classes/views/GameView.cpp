@@ -7,22 +7,22 @@ USING_NS_CC;
 
 bool GameView::init() {
     if (!Node::init()) return false;
-    // 1) ÏÈ¹¹½¨ÉÏÏÂ·ÖÇøµÄ±³¾°É«¿é£¨½öÓÃÓÚÊÓ¾õ·Ö²ã£©
+    // 1) å…ˆæ„å»ºä¸Šä¸‹åˆ†åŒºçš„èƒŒæ™¯è‰²å—ï¼ˆä»…ç”¨äºè§†è§‰åˆ†å±‚ï¼‰
     buildBackgroundSections();
 
-    // 2) ´´½¨²¢°Ú·ÅÉÏ°ëÇø£¨Íæ·¨Çø/ÅÆ×ÀÇø£©
+    // 2) åˆ›å»ºå¹¶æ‘†æ”¾ä¸ŠåŠåŒºï¼ˆç©æ³•åŒº/ç‰Œæ¡ŒåŒºï¼‰
     _playfield = PlayFieldView::create();
     _playfield->setPosition(Vec2(
-        CardResConfig::kDesignW * 0.5f,// ¾ÓÖĞ
-        CardResConfig::kStackH + CardResConfig::kPlayfieldH * 0.5f// ·ÅÔÚÏÂÇøÖ®ÉÏ
+        CardResConfig::kDesignW * 0.5f,// å±…ä¸­
+        CardResConfig::kStackH + CardResConfig::kPlayfieldH * 0.5f// æ”¾åœ¨ä¸‹åŒºä¹‹ä¸Š
     ));
     addChild(_playfield, 0);
 
-    // 3) ´´½¨²¢°Ú·ÅÏÂ°ëÇø£¨¶ÑÇø/·¢ÅÆÇø£©
+    // 3) åˆ›å»ºå¹¶æ‘†æ”¾ä¸‹åŠåŒºï¼ˆå †åŒº/å‘ç‰ŒåŒºï¼‰
     _stack = StackView::create();
     _stack->setPosition(Vec2(
-        CardResConfig::kDesignW * 0.5f,// ¾ÓÖĞ
-        CardResConfig::kStackH * 0.5f// ÏÂÇø¾ÓÖĞ
+        CardResConfig::kDesignW * 0.5f,// å±…ä¸­
+        CardResConfig::kStackH * 0.5f// ä¸‹åŒºå±…ä¸­
     ));
     addChild(_stack, 1);
 
@@ -30,7 +30,7 @@ bool GameView::init() {
 }
 
 void GameView::buildBackgroundSections() {
-    // ÉÏ°ëÇø±³¾°£ºÒ»°ã×÷Îª¡°Íæ·¨/ÅÆ×ÀÇø¡±µÄµ×É«
+    // ä¸ŠåŠåŒºèƒŒæ™¯ï¼šä¸€èˆ¬ä½œä¸ºâ€œç©æ³•/ç‰Œæ¡ŒåŒºâ€çš„åº•è‰²
     auto pfLayer = LayerColor::create(
         Color4B(175, 128, 78, 255),
         CardResConfig::kDesignW, CardResConfig::kPlayfieldH);
@@ -39,9 +39,9 @@ void GameView::buildBackgroundSections() {
     pfLayer->setPosition(Vec2(
         CardResConfig::kDesignW * 0.5f,
         CardResConfig::kStackH + CardResConfig::kPlayfieldH * 0.5f));
-    addChild(pfLayer, -10);// ±³¾°·Åµ½¸üµÍ²ã£¨z=-10£©
+    addChild(pfLayer, -10);// èƒŒæ™¯æ”¾åˆ°æ›´ä½å±‚ï¼ˆz=-10ï¼‰
 
-    // ÏÂ°ëÇø±³¾°£ºÒ»°ã×÷Îª¡°¶ÑÇø/·¢ÅÆÇø¡±µÄµ×É«
+    // ä¸‹åŠåŒºèƒŒæ™¯ï¼šä¸€èˆ¬ä½œä¸ºâ€œå †åŒº/å‘ç‰ŒåŒºâ€çš„åº•è‰²
     auto stLayer = LayerColor::create(
         Color4B(128, 32, 128, 255),
         CardResConfig::kDesignW, CardResConfig::kStackH);
@@ -50,19 +50,19 @@ void GameView::buildBackgroundSections() {
     stLayer->setPosition(Vec2(
         CardResConfig::kDesignW * 0.5f,
         CardResConfig::kStackH * 0.5f));
-    addChild(stLayer, -10);// Í¬Ñù·ÅÔÚµ×²ã
+    addChild(stLayer, -10);// åŒæ ·æ”¾åœ¨åº•å±‚
 }
 
 void GameView::setupInitialLayout(const LayoutManager&, const LevelConfig&) {
-    // UI ¸ù²Ëµ¥£¬¹ÒÔÚµ×²¿¶ÑÇø½ÚµãÉÏ£¬±£Ö¤²ã¼¶ÔÚÅÆÃæÉÏÃæ
+    // UI æ ¹èœå•ï¼ŒæŒ‚åœ¨åº•éƒ¨å †åŒºèŠ‚ç‚¹ä¸Šï¼Œä¿è¯å±‚çº§åœ¨ç‰Œé¢ä¸Šé¢
     auto menu = Menu::create();
     menu->setName("UIRoot");
     menu->setPosition(Vec2::ZERO);
-    _stack->addChild(menu, 100); // z=100£¬Ñ¹¹ıËùÓĞ¿¨ÅÆ
+    _stack->addChild(menu, 100); // z=100ï¼Œå‹è¿‡æ‰€æœ‰å¡ç‰Œ
 
-    // ÎÄ±¾£ºÓÅÏÈÓÃÖĞÎÄ TTF£¬Ã»·Å×ÖÌåÊ±×Ô¶¯»ØÍËÓ¢ÎÄ
+    // æ–‡æœ¬ï¼šä¼˜å…ˆç”¨ä¸­æ–‡ TTFï¼Œæ²¡æ”¾å­—ä½“æ—¶è‡ªåŠ¨å›é€€è‹±æ–‡
     MenuItemLabel* undoBtn = nullptr;
-    auto labelCN = Label::createWithTTF(u8"»ØÍË", "fonts/msyh.ttc", 40);
+    auto labelCN = Label::createWithTTF(u8"å›é€€", "fonts/msyh.ttc", 40);
     if (labelCN) {
         undoBtn = MenuItemLabel::create(labelCN, nullptr);
     }
@@ -73,15 +73,15 @@ void GameView::setupInitialLayout(const LayoutManager&, const LevelConfig&) {
     undoBtn->setName("UndoButton");
     undoBtn->setAnchorPoint(Vec2(1.f, 0.5f));
 
-    // ½«°´Å¥·Åµ½ÏÂ°ëÇøÓÒ²àÄÚ±ß¾à´¦
-    const float pad = 70.f; // ÓÒ²àÄÚ±ß¾à
+    // å°†æŒ‰é’®æ”¾åˆ°ä¸‹åŠåŒºå³ä¾§å†…è¾¹è·å¤„
+    const float pad = 70.f; // å³ä¾§å†…è¾¹è·
     undoBtn->setPosition(Vec2(CardResConfig::kDesignW - pad, CardResConfig::kStackH * 0.5f));
 
     menu->addChild(undoBtn);
 }
 
 void GameView::playEnterAnimation(const std::function<void()>& onDone) {
-    // ÕûÌåµ­Èë¶¯»­£ºÏÈÉèÖÃÍ¸Ã÷£¬ÔÙÓÃ 0.2s µ­Èë£»½áÊøºóÖ´ĞĞ»Øµ÷
+    // æ•´ä½“æ·¡å…¥åŠ¨ç”»ï¼šå…ˆè®¾ç½®é€æ˜ï¼Œå†ç”¨0.2s æ·¡å…¥ï¼›ç»“æŸåæ‰§è¡Œå›è°ƒ
     setOpacity(0);
     runAction(Sequence::create(
         FadeIn::create(0.2f),
@@ -89,10 +89,9 @@ void GameView::playEnterAnimation(const std::function<void()>& onDone) {
         nullptr));
 }
 
-// ¡ï findCardViewIn ÊµÏÖ£¨µ¥Ö¸Õë Node*£©
-// ¡ï ¹¤¾ß£ºÔÚÖ¸¶¨¸¸½ÚµãÏÂ£¬°´ uid ²éÕÒ CardView
-//   - ½ö±éÀú parent µÄ¡°Ö±½Ó×Ó½Úµã¡±£¨·Çµİ¹é£©
-//   - ÈôÄãµÄ²ã¼¶¸üÉî£¬¿É°´ĞèÀ©Õ¹Îªµİ¹é°æ±¾
+//findCardViewIn å®ç°
+//å·¥å…·ï¼šåœ¨æŒ‡å®šçˆ¶èŠ‚ç‚¹ä¸‹ï¼ŒæŒ‰uidæŸ¥æ‰¾CardView
+//ä»…éå† parent çš„â€œç›´æ¥å­èŠ‚ç‚¹â€
 CardView* GameView::findCardViewIn(Node* parent, int uid) const {
     if (!parent) return nullptr;
     const auto& children = parent->getChildren();
