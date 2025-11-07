@@ -2,42 +2,23 @@
 #include "cocos2d.h"
 #include <functional>
 
-//PlayFieldView ÊÇÉÏ°ëÇøµÄ¡°×ÀÃæ / ÅÆ×ÀÊÓÍ¼ÈÝÆ÷¡±£º
-// ¸ºÔð³ÐÔØ×ÀÃæÉÏµÄËùÓÐ CardView¡¢´¦Àíµã»÷ÃüÖÐ²¢°Ñ¿¨ÅÆuidÉÏÅ×£¬
-// ÒÔ¼°°ÑÒ»ÕÅ×ÀÃæÅÆÒÆ¶¯µ½ÍÐÅÌ£¨ÏÂ·½¶ÑÇø£©µÄ¹ý¶É¶¯»­£¨º¬¿ç¸¸½Úµã°áÔËÓëÎ»ÒÆ²¹¼ä£©¡£
-
 class CardView;
 /*
- * - ¡°×ÀÃæÅÆÇø¡±µÄÊÓÍ¼ÈÝÆ÷£¨Î»ÓÚÉÏ°ëÇø£©£¬³ÐÔØÈô¸É CardView ×÷Îª×Ó½Úµã¡£
- * - Ìá¹©µã»÷»Øµ÷£º½«ÃüÖÐµÄ¿¨ÅÆ uid ÉÏÅ×¸øÍâ²¿Âß¼­£¨²»ÔÚ´Ë´¦×ö¹æÔòÅÐ¶Ï£©¡£
- * - Ìá¹©½«×ÀÃæÅÆ¡°ÒÆÈëÍÐÅÌ¡±µÄ¶¯»­½Ó¿Ú£¨¿ç¸¸½Úµã°áÔË + Æ½ÒÆ¶¯»­£©¡£
+ * - â€œæ¡Œé¢ç‰ŒåŒºâ€çš„è§†å›¾å®¹å™¨ï¼ˆä½äºŽä¸ŠåŠåŒºï¼‰ï¼Œæ‰¿è½½è‹¥å¹²CardViewä½œä¸ºå­èŠ‚ç‚¹ã€‚
+ * - æä¾›ç‚¹å‡»å›žè°ƒï¼šå°†å‘½ä¸­çš„å¡ç‰Œuidä¸ŠæŠ›ç»™å¤–éƒ¨é€»è¾‘ï¼ˆä¸åœ¨æ­¤å¤„åšè§„åˆ™åˆ¤æ–­ï¼‰ã€‚
+ * - æä¾›å°†æ¡Œé¢ç‰Œâ€œç§»å…¥æ‰˜ç›˜â€çš„åŠ¨ç”»æŽ¥å£ï¼ˆè·¨çˆ¶èŠ‚ç‚¹æ¬è¿ + å¹³ç§»åŠ¨ç”»ï¼‰ã€‚
  */
 class PlayFieldView : public cocos2d::Node {
 public:
     CREATE_FUNC(PlayFieldView);
     bool init() override;
 
-    // µã»÷×ÀÃæÅÆ»Øµ÷£¨°Ñ¿¨ÅÆ uid ´«»ØÈ¥£©
-    // ËµÃ÷£ºenableTouch ÖÐ´Ó×îÉÏ²ã×Ó½ÚµãÍùÏÂ×öÃüÖÐ²âÊÔ£¬ÃüÖÐ¼´»Øµ÷¡£
-    void setOnCardClickCallback(std::function<void(int)> cb) { // ÉèÖÃ»Øµ÷º¯Êý
-        _onCardClick = std::move(cb); // ±£´æ»Øµ÷
+    // ç‚¹å‡»æ¡Œé¢ç‰Œå›žè°ƒï¼ˆæŠŠå¡ç‰Œuidä¼ å›žåŽ»ï¼‰
+    void setOnCardClickCallback(std::function<void(int)> cb) { // è®¾ç½®å›žè°ƒå‡½æ•°
+        _onCardClick = std::move(cb); //ä¿å­˜å›žè°ƒ
     } 
 
-    /**
-     * ×ÀÃæÅÆÒÆÈëÍÐÅÌ£¨¶¥²¿£©¶¯»­£º
-     * - µäÐÍÓÃÓÚ¡°×ÀÃæÅÆÓëÊÖÅÆÆ¥Åä³É¹¦ºó¡±½«¸ÃÅÆÒÆ¶¯µ½ÏÂ·½ÍÐÅÌµÄ¹ý¶É¡£
-     * - ¹ý³Ì£º
-     *   1) ½« fromPos£¨±¾½Úµã¾Ö²¿×ø±ê£©ÏÈ×ªÎªÊÀ½ç×ø±ê£¬ÔÙ×ªµ½ÍÐÅÌ¸¸½ÚµãµÄ¾Ö²¿×ø±ê£»
-     *   2) °Ñ CardView ´Óµ±Ç°¸¸½ÚµãÒÆ³ý¡¢¼Óµ½ÍÐÅÌ¸¸½Úµã£»
-     *   3) ÏÈÉèÖÃµ½×ª»»ºóµÄÆðµãÎ»ÖÃ£¬ÔÙ×ö TweenService µÄÎ»ÒÆ¶¯»­µ½ trayLocalPos£»
-     *   4) ¶¯»­½áÊøºóµ÷ÓÃ onDone¡£
-     * @param cv            ½«ÒªÒÆ¶¯µÄ¿¨ÅÆÊÓÍ¼£¨ÒÑ´æÔÚÓÚ±¾ÊÓÍ¼»òÆä×Ó²ã£©
-     * @param fromPos       ÒÆ¶¯Æðµã£¨±¾ÊÓÍ¼µÄ¾Ö²¿×ø±êÏµ£©
-     * @param trayParent    Ä¿±êÍÐÅÌµÄ¸¸½Úµã£¨ÀýÈç StackView ÄÚµÄÄ³²ãÈÝÆ÷£©
-     * @param trayLocalPos  ÔÚ trayParent ×ø±êÏµÏÂµÄÄ¿±êÎ»ÖÃ
-     * @param onDone        ¶¯»­Íê³É»Øµ÷£¨¿ÉÎª¿Õ£©
-     */
-    // ×ÀÃæÅÆÒÆÈëÍÐÅÌ£¨¶¥²¿£©¶¯»­£º°Ñ½Úµã´Ó±¾²ã°áµ½Ä¿±ê¸¸½Úµã²¢Æ½ÒÆ¶¯»­
+    // æ¡Œé¢ç‰Œç§»å…¥æ‰˜ç›˜ï¼ˆé¡¶éƒ¨ï¼‰åŠ¨ç”»ï¼šæŠŠèŠ‚ç‚¹ä»Žæœ¬å±‚æ¬åˆ°ç›®æ ‡çˆ¶èŠ‚ç‚¹å¹¶å¹³ç§»åŠ¨ç”»
     void playMoveToTrayAnimation(CardView* cv,
         const cocos2d::Vec2& fromPos,
         cocos2d::Node* trayParent,
@@ -45,6 +26,6 @@ public:
         const std::function<void()>& onDone);
 
 private:
-    std::function<void(int)> _onCardClick;// ÉùÃ÷µã»÷»Øµ÷  µã»÷»Øµ÷£º½ö´«»Ø¿¨ÅÆ uid
-    void enableTouch();// ÆôÓÃµ¥µã´¥Ãþ¼àÌý£º¸ºÔð´Ó¶¥²ã×Ó½Úµã¿ªÊ¼ÃüÖÐ²âÊÔ²¢ÉÏÅ×uid
+    std::function<void(int)> _onCardClick;// å£°æ˜Žç‚¹å‡»å›žè°ƒ  ç‚¹å‡»å›žè°ƒï¼šä»…ä¼ å›žå¡ç‰Œuid
+    void enableTouch();// å¯ç”¨å•ç‚¹è§¦æ‘¸ç›‘å¬ï¼šè´Ÿè´£ä»Žé¡¶å±‚å­èŠ‚ç‚¹å¼€å§‹å‘½ä¸­æµ‹è¯•å¹¶ä¸ŠæŠ›uid
 };
