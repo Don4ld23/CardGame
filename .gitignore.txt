@@ -1,0 +1,34 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.vcxproj.user
+Debug/
+Release/
+build/
+bin/
+obj/
+*.pdb
+*.idb
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Cocos2d-x engine build artifacts
+proj.android-studio/.gradle/
+proj.android-studio/build/
+proj.android-studio/.idea/
+proj.win32/Debug.win32/
+proj.win32/Release.win32/
+proj.win32/Debug/
+proj.win32/Release/
+
+# Python cache
+__pycache__/
+*.pyc
