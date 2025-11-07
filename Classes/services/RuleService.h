@@ -1,20 +1,10 @@
 #pragma once
 /**
- * - ·â×°Óë¡°³öÅÆ¹æÔò¡±Ïà¹ØµÄ¾²Ì¬ÅÐ¶Ïº¯Êý¡£
- * - µ±Ç°Ö»Ìá¹©ÏàÁÚÅÐ¶Ï£ºadjacent(a, b)
- *   * ±ê×¼ÏàÁÚ£º|a - b| == 1
- *   * ¿ÉÑ¡»·½Ó£ºA(1) Óë K(13) Ò²ËãÏàÁÚ£¨ÓÉ CardResConfig::kWrapAk ¿ØÖÆ£©
+ * - å°è£…ä¸Žâ€œå‡ºç‰Œè§„åˆ™â€ç›¸å…³çš„é™æ€åˆ¤æ–­å‡½æ•°ã€‚
+ * - å½“å‰åªæä¾›ç›¸é‚»åˆ¤æ–­ï¼šadjacent(a, b)
+ *   * æ ‡å‡†ç›¸é‚»ï¼š|a - b| == 1
+ *   * å¯é€‰çŽ¯æŽ¥ï¼šA(1) ä¸Ž K(13) ä¹Ÿç®—ç›¸é‚»ï¼ˆç”±CardResConfig::kWrapAkæŽ§åˆ¶ï¼‰
  */
 struct RuleService {
-    /**
-    * ÅÐ¶ÏÁ½¸öµãÊýÊÇ·ñÏàÁÚ
-    * @param a  µãÊý£¨½¨Òé 1..13£ºA=1, J=11, Q=12, K=13£©
-    * @param b  µãÊý£¨Í¬ÉÏ£©
-    * @return   true ÏàÁÚ£»false ²»ÏàÁÚ»òÊäÈë·Ç·¨£¨<=0£©
-    *
-    * ËµÃ÷£º
-    * - ±ê×¼¹æÔò£º|a - b| == 1
-    * - Èô CardResConfig::kWrapAk Îª true£¬Ôò (1,13) Óë (13,1) Ò²ÊÓÎªÏàÁÚ
-    */
     static bool adjacent(int a, int b);
 };
