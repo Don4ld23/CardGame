@@ -8,48 +8,37 @@
 #include "controllers/StackController.h"
 #include <memory>
 
-//GameController ¼Ì³Ð Scene£¬ÊÇÕû¾ÖÓÎÏ·µÄ×Ü¿ØÖÆÆ÷£º
-// ¸ºÔð°´¹Ø¿¨ÔØÈëÊý¾Ý ¡ú Éú³ÉÄ£ÐÍ ¡ú ¹¹½¨ÊÓÍ¼ ¡ú ×é×°×Ó¿ØÖÆÆ÷£¨×ÀÃæÇø/ÍÐÅÌÇø£©¡ú °ó¶¨»ØÍË°´Å¥ ¡ú ²¥·ÅÈë³¡¶¯»­¡£
-//ÄÚ²¿Î¬»¤£º
-//Êý¾Ý£ºGameModel£¨×ÀÃæ¡¢ÊÖÅÆ¡¢¶¥²¿ÅÆµÈ×´Ì¬£©£»
-//ÊÓÍ¼£ºGameView£¨¶¥¼¶ÊÓÍ¼ÈÝÆ÷£©£»
-//¿ØÖÆ£ºPlayFieldController£¨ÉÏ°ëÇø£©Óë StackController£¨ÏÂ°ëÇø£©£»
-//²¼¾Ö£ºLayoutManager£»
-//»ØÍË£ºUndoManager£¨Ìá¹© UndoStack£©¡£
-//undoOnce() ¸ù¾Ý UndoManager ¼ÇÂ¼°Ñ×î½üÒ»²½²Ù×÷¸´Ô­£¬°üº¬¿ç¸¸½Úµã°áÔËÓëÎ»ÖÃ²¹¼ä£¬Í¬Ê±»ØÌî GameModel ×´Ì¬¡£
-
-
 /**
- * GameController£¨³¡¾°¼¶¿ØÖÆÆ÷£©
- * ½ÇÉ«£ºÕû¾ÖÓÎÏ·µÄÉúÃüÖÜÆÚ×Ü¿Ø£¨Êý¾Ý×°Åä¡¢ÊÓÍ¼´î½¨¡¢¿ØÖÆÆ÷°ó¶¨¡¢»ØÍË´¦Àí£©¡£
- * - ¼Ì³Ð×Ô cocos2d::Scene£º¿ÉÖ±½Ó runWithScene() ×÷Îª³¡¾°½øÈë¡£
- * - startGame(levelId)£º°´¹Ø¿¨ ID ×°Åä GameModel£¬´´½¨ GameView£¬¹¹½¨×Ó¿ØÖÆÆ÷¡£
- * - undoOnce()£º´Ó UndoManager ÖÐµ¯³öÒ»²½¼ÇÂ¼£¬Ö´ÐÐÊÓÍ¼/Ä£ÐÍµÄÄæ²Ù×÷¡£
+ * GameControllerï¼ˆåœºæ™¯çº§æŽ§åˆ¶å™¨ï¼‰
+ * æ•´å±€æ¸¸æˆçš„ç”Ÿå‘½å‘¨æœŸæ€»æŽ§ï¼ˆæ•°æ®è£…é…ã€è§†å›¾æ­å»ºã€æŽ§åˆ¶å™¨ç»‘å®šã€å›žé€€å¤„ç†ï¼‰ã€‚
+ * ç»§æ‰¿è‡ªcocos2d::Sceneï¼šå¯ç›´æŽ¥runWithScene() ä½œä¸ºåœºæ™¯è¿›å…¥ã€‚
+ * startGame(levelId)ï¼šæŒ‰å…³å¡IDè£…é…GameModelï¼Œåˆ›å»ºGameViewï¼Œæž„å»ºå­æŽ§åˆ¶å™¨ã€‚
+ * undoOnce()ï¼šä»ŽUndoManagerä¸­å¼¹å‡ºä¸€æ­¥è®°å½•ï¼Œæ‰§è¡Œè§†å›¾/æ¨¡åž‹çš„é€†æ“ä½œã€‚
  */
 class GameController : public cocos2d::Scene {
 public:
     CREATE_FUNC(GameController);
     bool init() override;
-    ~GameController() override;          // ¡ï Ö»ÉùÃ÷£¬²»ÄÚÁª¶¨Òå
+    ~GameController() override;
 
-    // ¿ªÊ¼Ò»¾Ö£¨°´¹Ø¿¨ ID ÔØÈëÅäÖÃ²¢³õÊ¼»¯ MVC£©
+    // å¼€å§‹ä¸€å±€ï¼ˆæŒ‰å…³å¡IDè½½å…¥é…ç½®å¹¶åˆå§‹åŒ–MVCï¼‰
     void startGame(int levelId);
-    // Ö´ÐÐÒ»´Î³·Ïú£¨ÈôÓÐ¼ÇÂ¼£©
+    // æ‰§è¡Œä¸€æ¬¡æ’¤é”€ï¼ˆè‹¥æœ‰è®°å½•ï¼‰
     void undoOnce();
 
 private:
-    GameView* _gameView = nullptr;// ¶¥¼¶ÊÓÍ¼ÈÝÆ÷£¨ÓµÓÐ PlayFieldView/StackView£©
-    GameModel _gameModel;// Êý¾ÝÄ£ÐÍ£¨×ÀÃæ¡¢ÊÖÅÆ¡¢¶¥²¿µÈ×´Ì¬£©
+    GameView* _gameView = nullptr;// é¡¶çº§è§†å›¾å®¹å™¨ï¼ˆæ‹¥æœ‰PlayFieldView/StackViewï¼‰
+    GameModel _gameModel;// æ•°æ®æ¨¡åž‹ï¼ˆæ¡Œé¢ã€æ‰‹ç‰Œã€é¡¶éƒ¨ç­‰çŠ¶æ€ï¼‰
 
-    // ×Ó¿ØÖÆÆ÷£ºÉÏ°ëÇø£¨ÅÆ×À/Íæ·¨Çø£©ÓëÏÂ°ëÇø£¨ÍÐÅÌ/¶ÑÇø£©
+    // å­æŽ§åˆ¶å™¨ï¼šä¸ŠåŠåŒºï¼ˆç‰Œæ¡Œ/çŽ©æ³•åŒºï¼‰ä¸Žä¸‹åŠåŒºï¼ˆæ‰˜ç›˜/å †åŒºï¼‰
     std::unique_ptr<PlayFieldController> _pfCtl;
     std::unique_ptr<StackController>     _stCtl;
 
-    LayoutManager _layout;// ¼ÆËã²¼¾ÖÎ»ÖÃ£¨ÈçÊÖÅÆ²ÛÎ»¡¢¶¥²¿ÅÆÎ»£©
-    UndoManager   _undo;// »ØÍË¹ÜÀí£¨ÄÚ²¿ÓÐÒ»¸öÕ»£©
+    LayoutManager _layout;// è®¡ç®—å¸ƒå±€ä½ç½®ï¼ˆå¦‚æ‰‹ç‰Œæ§½ä½ã€é¡¶éƒ¨ç‰Œä½ï¼‰
+    UndoManager   _undo;// å›žé€€ç®¡ç†ï¼ˆå†…éƒ¨æœ‰ä¸€ä¸ªæ ˆï¼‰
 
-    // °ó¶¨ UI¡°»ØÍË¡±°´Å¥µ½ undoOnce()
+    // ç»‘å®š UIâ€œå›žé€€â€æŒ‰é’®åˆ° undoOnce()
     void hookUndoButton();
-    // ÇåÀíµ±Ç°¾Ö£¨ÊÓÍ¼/¿ØÖÆÆ÷/Ä£ÐÍ/»ØÍËÕ»¸´Î»£©
+    // æ¸…ç†å½“å‰å±€ï¼ˆè§†å›¾/æŽ§åˆ¶å™¨/æ¨¡åž‹/å›žé€€æ ˆå¤ä½ï¼‰
     void destroyRunningGame();
 };
