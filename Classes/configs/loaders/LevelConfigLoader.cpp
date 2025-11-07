@@ -1,35 +1,34 @@
 #include "configs/loaders/LevelConfigLoader.h"
 #include "cocos2d.h"
-#include "json/document.h" // Cocos2d-x×Ô´øµÄrapidjson
+#include "json/document.h"
 
 using namespace cocos2d;
 
-
-//°ÑJSONÊı×éĞ´Èëµ½vector<LevelCardCfg> ¼´½âÎöJSONÊı×é£¬Êä³ö¹Ø¿¨(¿¨Æ¬)ÅäÖÃÁĞ±í
+//æŠŠJSONæ•°ç»„å†™å…¥åˆ°vector<LevelCardCfg> å³è§£æJSONæ•°ç»„ï¼Œè¾“å‡ºå…³å¡(å¡ç‰‡)é…ç½®åˆ—è¡¨
 static void parseArray(const rapidjson::Value& arr, std::vector<LevelCardCfg>& out) {
     out.clear();
-    for (auto& v : arr.GetArray()) {// ±éÀúJSONÊı×éÖĞµÄÃ¿¸öÔªËØ
-        LevelCardCfg c;// ´´½¨ÁÙÊ±¿¨Æ¬ÅäÖÃ¶ÔÏó
-        // ¶ÁÈ¡µãÊı/»¨É«
+    for (auto& v : arr.GetArray()) {// éå†JSONæ•°ç»„ä¸­çš„æ¯ä¸ªå…ƒç´ 
+        LevelCardCfg c;// åˆ›å»ºä¸´æ—¶å¡ç‰‡é…ç½®å¯¹è±¡
+        // è¯»å–ç‚¹æ•°/èŠ±è‰²
         c.CardFace = v["CardFace"].GetInt();
         c.CardSuit = v["CardSuit"].GetInt();
-        // Î»ÖÃ×ø±ê
+        // ä½ç½®åæ ‡
         c.Position.x = v["Position"]["x"].GetFloat();
         c.Position.y = v["Position"]["y"].GetFloat();
-        out.push_back(c);// ½«½âÎöºÃµÄ¿¨Æ¬ÅäÖÃ¼ÓÈë½á¹ûÁĞ±í
+        out.push_back(c);// å°†è§£æå¥½çš„å¡ç‰‡é…ç½®åŠ å…¥ç»“æœåˆ—è¡¨
     }
 }
 
-//´ÓJSONÎÄ¼ş¼ÓÔØÓÎÏ·(¹Ø¿¨)ÅäÖÃ
+//ä»JSONæ–‡ä»¶åŠ è½½æ¸¸æˆ(å…³å¡)é…ç½®
 bool LevelConfigLoader::loadFromJson(const std::string& path, LevelConfig& out) {
-    //¶ÁÈ¡ÎÄ±¾
-    std::string s = FileUtils::getInstance()->getStringFromFile(path);//¶ÁÈ¡ÎÄ¼şÄÚÈİµ½×Ö·û´®
+    //è¯»å–æ–‡æœ¬
+    std::string s = FileUtils::getInstance()->getStringFromFile(path);//è¯»å–æ–‡ä»¶å†…å®¹åˆ°å­—ç¬¦ä¸²
     if (s.empty()) {
         CCLOGERROR("LevelConfigLoader: file not found or empty: %s", path.c_str());
         return false;
     }
 
-    //½âÎöJSON
+    //è§£æJSON
     rapidjson::Document d; 
     d.Parse(s.c_str());
     if (!d.IsObject()) {
@@ -37,20 +36,19 @@ bool LevelConfigLoader::loadFromJson(const std::string& path, LevelConfig& out) 
         return false;
     }
 
-
-    //Playfield / Stack Á½¸öÊı×é
-    //¼ì²éJSONÖĞ±ØĞë°üº¬"Playfield"Êı×é
+    //Playfield / Stack ä¸¤ä¸ªæ•°ç»„
+    //æ£€æŸ¥JSONä¸­å¿…é¡»åŒ…å«"Playfield"æ•°ç»„
     if (!d.HasMember("Playfield") || !d["Playfield"].IsArray()) {
         CCLOGERROR("LevelConfigLoader: missing Playfield in %s", path.c_str());
         return false;
     }
-    //¼ì²éJSONÖĞ±ØĞë°üº¬"Stack"Êı×é
+    //æ£€æŸ¥JSONä¸­å¿…é¡»åŒ…å«"Stack"æ•°ç»„
     if (!d.HasMember("Stack") || !d["Stack"].IsArray()) {
         CCLOGERROR("LevelConfigLoader: missing Stack in %s", path.c_str());
         return false;
     }
 
-    // 5) ½âÎöµ½ LevelConfig
+    // 5) è§£æåˆ° LevelConfig
     parseArray(d["Playfield"], out.playfield);
     parseArray(d["Stack"], out.stack);
     return true;
