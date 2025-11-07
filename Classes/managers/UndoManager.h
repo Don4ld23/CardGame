@@ -3,35 +3,30 @@
 #include <vector>
 
 /**
- * ³·Ïú¹ÜÀíÆ÷£ºÎ¬»¤Ò»¸ö¡°³·Ïú¼ÇÂ¼¡±µÄÕ»£¨ºó½øÏÈ³ö LIFO£©¡£
- * - init()   £ºÇå¿Õ³·ÏúÕ»£¨ÐÂ¾Ö»òÖØÖÃÊ±µ÷ÓÃ£©
- * - push(r)  £ºÑ¹ÈëÒ»Ìõ³·Ïú¼ÇÂ¼£¨Ã¿´ÎÓÐÐ§²Ù×÷ºóµ÷ÓÃ£©
- * - empty()  £ºÊÇ·ñÎª¿Õ£¨ÓÃÓÚÅÐ¶ÏÄÜ·ñ³·Ïú£©
- * - pop()    £ºµ¯³ö×î½üÒ»Ìõ³·Ïú¼ÇÂ¼²¢·µ»Ø£¨Ö´ÐÐ³·ÏúÊ±µ÷ÓÃ£©
- * - stack()  £º±©Â¶µ×²ãÈÝÆ÷ÒýÓÃ£¬¹©ÐèÒªÖ±½Ó·ÃÎÊµÄ·þÎñ/¿ØÖÆÆ÷Ê¹ÓÃ
- *
- * ËµÃ÷£º
- * - UndoRecord µÄ½á¹¹¶¨ÒåÔÚ models/UndoModel.h ÖÐ£¬Í¨³£°üº¬£º
- *   * type£¨²Ù×÷ÀàÐÍ£¬Èç HAND_TO_TOP / TABLE_TO_TOP£©
- *   * movedUid / prevTopUid / fromHandIndex / fromPos µÈ
+ * æ’¤é”€ç®¡ç†å™¨ï¼šç»´æŠ¤ä¸€ä¸ªæ’¤é”€è®°å½•çš„æ ˆï¼‰ã€‚
+ * - init()   ï¼šæ¸…ç©ºæ’¤é”€æ ˆï¼ˆæ–°å±€æˆ–é‡ç½®æ—¶è°ƒç”¨ï¼‰
+ * - push(r)  ï¼šåŽ‹å…¥ä¸€æ¡æ’¤é”€è®°å½•ï¼ˆæ¯æ¬¡æœ‰æ•ˆæ“ä½œåŽè°ƒç”¨ï¼‰
+ * - empty()  ï¼šæ˜¯å¦ä¸ºç©ºï¼ˆç”¨äºŽåˆ¤æ–­èƒ½å¦æ’¤é”€ï¼‰
+ * - pop()    ï¼šå¼¹å‡ºæœ€è¿‘ä¸€æ¡æ’¤é”€è®°å½•å¹¶è¿”å›žï¼ˆæ‰§è¡Œæ’¤é”€æ—¶è°ƒç”¨ï¼‰
+ * - stack()  ï¼šæš´éœ²åº•å±‚å®¹å™¨å¼•ç”¨ï¼Œä¾›éœ€è¦ç›´æŽ¥è®¿é—®çš„æœåŠ¡/æŽ§åˆ¶å™¨ä½¿ç”¨
  */
 
 class UndoManager {
 public:
-    // ÖØÖÃ³·ÏúÕ»£¨¿ªÐÂ¾Ö»òÇÐ¹Ø¿¨Ê±£©
+    // é‡ç½®æ’¤é”€æ ˆï¼ˆå¼€æ–°å±€æˆ–åˆ‡å…³å¡æ—¶ï¼‰
     void init() { _stack.clear(); }
-    // ÍÆÈëÒ»Ìõ³·Ïú¼ÇÂ¼£¨Íê³ÉÒ»´ÎÇ°½ø²Ù×÷ºóµ÷ÓÃ£©
+    // æŽ¨å…¥ä¸€æ¡æ’¤é”€è®°å½•ï¼ˆå®Œæˆä¸€æ¬¡å‰è¿›æ“ä½œåŽè°ƒç”¨ï¼‰
     void push(const UndoRecord& r) { _stack.push_back(r); }
-    // ³·ÏúÕ»ÊÇ·ñÎª¿Õ£¨Îª¿ÕÔò²»ÄÜ³·Ïú£©
+    // æ’¤é”€æ ˆæ˜¯å¦ä¸ºç©ºï¼ˆä¸ºç©ºåˆ™ä¸èƒ½æ’¤é”€ï¼‰
     bool empty() const { return _stack.empty(); }
-    // µ¯³ö×î½üÒ»´Î²Ù×÷¼ÇÂ¼£¨µ÷ÓÃ·½¾Ý´ËÖ´ÐÐ»Ø¹ö£©
+    // å¼¹å‡ºæœ€è¿‘ä¸€æ¬¡æ“ä½œè®°å½•ï¼ˆè°ƒç”¨æ–¹æ®æ­¤æ‰§è¡Œå›žæ»šï¼‰
     UndoRecord pop() { 
         UndoRecord r = _stack.back();
         _stack.pop_back(); 
         return r; 
     }
-    // Ö±½Ó·ÃÎÊµ×²ãÈÝÆ÷£¨ÀýÈç´«¸ø¿ØÖÆÆ÷/·þÎñ½øÐÐ¸üÁé»îµÄ²Ù×÷£©
+    // ç›´æŽ¥è®¿é—®åº•å±‚å®¹å™¨ï¼ˆä¾‹å¦‚ä¼ ç»™æŽ§åˆ¶å™¨/æœåŠ¡è¿›è¡Œæ›´çµæ´»çš„æ“ä½œï¼‰
     std::vector<UndoRecord>& stack() { return _stack; }
 private:
-    std::vector<UndoRecord> _stack;// ³·Ïú¼ÇÂ¼Õ»£¨LIFO£©
+    std::vector<UndoRecord> _stack;// æ’¤é”€è®°å½•æ ˆ
 };
